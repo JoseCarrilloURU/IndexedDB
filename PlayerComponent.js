@@ -6,7 +6,7 @@ open.onupgradeneeded = function() {
     var db = open.result;
     var store = db.createObjectStore("SongStore", {keyPath: "id"});
 };
-
+//hola como estas
 open.onsuccess = function() {
     var db = open.result;
     var tx = db.transaction("SongStore", "readonly");
