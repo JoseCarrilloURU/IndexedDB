@@ -1,10 +1,4 @@
-metodo.play 
-tomara la ubicacion de la cancion del index y  reproduce
 
-metodo.agregar cancion 
-toma la cancion del archivo lo copia en otro archivo y agrega en el indexDB
-
-metodo.stop
 
 metodo.next
 

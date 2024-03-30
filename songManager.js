@@ -5,6 +5,7 @@ class SongManager {
         this.idCounter = 0;
         this.audis = "der";
         this.audio=null;
+        this.getSongCount();
         console.log("SongManager creado");
     }
 
@@ -46,9 +47,11 @@ class SongManager {
     playSong(id) {
         let transaction = this.db.transaction([this.storeName], "readonly");
         let store = transaction.objectStore(this.storeName);
+        console.log("id",id);
         let getRequest = store.get(id);
         getRequest.onsuccess = ()=> {
             // Imprime el resultado de la solicitud get
+
             console.log(getRequest.result.file); // {id: 1, name: "John Doe"}
             let url = URL.createObjectURL(getRequest.result.file);
             // Crear un nuevo elemento de audio y reproducir el archivo
@@ -95,6 +98,19 @@ class SongManager {
             console.log('Error', e.target.error.name);
         };
     }
+
+    getSongCount() {
+        let transaction = this.db.transaction([this.storeName], "readonly");
+      let store = transaction.objectStore(this.storeName);
+      let request = store.count();
+      request.onsuccess = ()=> {
+          this.idCounter= request.result
+      };
+      request.onerror = function(e) {
+          console.log("Error obteniendo el número de canciones: ", e);
+      };
+  }
+
 
     
 

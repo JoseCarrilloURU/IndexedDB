@@ -1,7 +1,8 @@
 
 
 let songManager;
-let id = 0;
+let id = 1;
+
 
 
 // Open (or create) the database
@@ -67,4 +68,10 @@ document.getElementById('delete-button').addEventListener('click', function() {
 document.getElementById('list').addEventListener('click', function() {
     songManager.getAllSongs();
 });
+
+document.getElementById('stop-button').addEventListener('click', function() {
+    songManager.stopSong();
+});
+
+
 
