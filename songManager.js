@@ -2,8 +2,8 @@ class SongManager {
     constructor(db, storeName) {
         this.db = db;
         this.storeName = storeName;
-        this.idCounter = 0;
-        this.audis = "der";
+        this.id = 0;
+
         this.audio=null;
         this.getSongCount();
         console.log("SongManager creado");
@@ -11,17 +11,22 @@ class SongManager {
 
     //añade cancion id 0
     addSong(file,name,author,album) {
-
+        console.log("añadiendo cancion",this.id);
         let transaction = this.db.transaction([this.storeName], "readwrite");
         let store = transaction.objectStore(this.storeName);
-        let request = store.add({id: this.idCounter++, name: name, author: author, album: album, file: file});
+        if(name==''){
+            let fileName = file.name.split('.')[0]; // get the file name without the extension
+            name = fileName
+            console.log("name durante",name);
+        }
+
+        let request = store.add({id: this.id++, name: name, author: author, album: album, file: file});
         request.onsuccess = function(e) {
             console.log("Canción añadida con éxito");
         };
         request.onerror = function(e) {
             console.log("Error al añadir la canción", e.target.error);
         };
-
     }
 
     /*
@@ -47,7 +52,7 @@ class SongManager {
     playSong(id) {
         let transaction = this.db.transaction([this.storeName], "readonly");
         let store = transaction.objectStore(this.storeName);
-        console.log("id",id);
+        console.log("playing id",id);
         let getRequest = store.get(id);
         getRequest.onsuccess = ()=> {
             // Imprime el resultado de la solicitud get
@@ -57,6 +62,7 @@ class SongManager {
             // Crear un nuevo elemento de audio y reproducir el archivo
             this.audio = new Audio(url);
             this.audio.play();
+            
         };
         getRequest.onerror = function(e) {
             console.log("Error al obtener la canción", e.target.error);
@@ -76,9 +82,10 @@ class SongManager {
     
         // Borra el objeto con el id proporcionado
         let request = store.delete(id);
+
     
         request.onsuccess = function(e) {
-            console.log("El objeto ha sido borrado con éxito");
+            console.log("El objeto ha sido borrado con éxito", id);
         };
     
         request.onerror = function(e) {
@@ -90,9 +97,23 @@ class SongManager {
         let transaction = this.db.transaction([this.storeName], "readonly");
         let store = transaction.objectStore(this.storeName);
         let getAllRequest = store.getAll();
-        getAllRequest.onsuccess = function() {
+        getAllRequest.onsuccess = ()=> {
             let songs = getAllRequest.result;
-            console.log(songs);
+            let songList = document.getElementById('song-list');
+            songList.innerHTML = ''; // clear the list
+            songs.forEach(song => {
+                let listItem = document.createElement('button');
+                listItem.textContent = song.id + ': ' + song.name; // display the song id and name
+                listItem.addEventListener('click', ()=> {
+                    if (this.audio){
+                        this.audio.pause();
+                        this.audio.currentTime = 0;
+                    }
+                    console.log('Playing song', song.id);
+                    this.playSong(song.id);
+                });
+                songList.appendChild(listItem);
+            });
         };
         getAllRequest.onerror = function(e) {
             console.log('Error', e.target.error.name);
@@ -100,18 +121,22 @@ class SongManager {
     }
 
     getSongCount() {
-        let transaction = this.db.transaction([this.storeName], "readonly");
-      let store = transaction.objectStore(this.storeName);
-      let request = store.count();
-      request.onsuccess = ()=> {
-          this.idCounter= request.result
-      };
-      request.onerror = function(e) {
-          console.log("Error obteniendo el número de canciones: ", e);
-      };
-  }
+        let transaction = this.db.transaction([this.storeName], 'readonly');
+        let store = transaction.objectStore(this.storeName);
+        let request = store.openCursor(null, 'prev');
+        
+        request.onsuccess = (e) => {
+            let cursor = e.target.result;
+            if (cursor) {
+                this.id = cursor.value.id + 1;
+            }
+        };
+        request.onerror = (e) =>{
+            console.log('Error', e.target.error.name);
+        };
+    }
 
-
+    
     
 
 
