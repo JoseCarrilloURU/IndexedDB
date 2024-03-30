@@ -22,19 +22,20 @@
   <body>
     <h1>Music Player</h1>
     <form id="song-form">
-      <input type="text" id="song-id" placeholder="Song ID" />
       <input type="text" id="song-name" placeholder="Song Name" />
       <input type="text" id="song-author" placeholder="Author" />
       <input type="text" id="song-album" placeholder="Album" />
-      <input type="file" id="song-file" />
+      <input type="file" id="song-file" accept="audio/*"  required/>
       <button type="submit">Add Song</button>
     </form>
+    <button id="list">list</button>
+
     <button id="play-button">Play</button>
-    <button id="pause-button">Pause</button>
     <button id="delete-button">Delete Song</button>
     <button id="next-button">Next</button>
     <button id="prev-button">Previous</button>
     <audio id="player"></audio>
-    <script src="PlayerComponent.js"></script>
+    <script src="main.js"></script>
+    <script src="songManager.js"></script>
   </body>
 </html>
