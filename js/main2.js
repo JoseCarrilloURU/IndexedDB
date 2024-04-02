@@ -66,10 +66,10 @@ uploadBtn.addEventListener('click', ()=>{
             let nombre = metadata.common.title;
             let artista = metadata.common.artist;
             let album = metadata.common.album;
+            //let year = metadata.common.year;
             let img= null;
             if (metadata.common.picture && metadata.common.picture[0]) {
                 img = metadata.common.picture[0];
-                
             }
             songManager.addSong(file,nombre,artista,album, img);
         } catch (error) {
@@ -106,20 +106,17 @@ const ulTag = wrapper.querySelector("ul");
 
 moreMusicBtn.addEventListener("click", async ()=>{
     allMusic = await songManager.getAllSongs();
-    console.log('dddddddd',allMusic);
     const ulTag = wrapper.querySelector("ul");
     ulTag.innerHTML = ''; // Vacía el contenido de ulTag
     // let create li tags according to array length for list
     for (let i = 0; i < allMusic.length; i++) {
       //let's pass the song name, artist from the array
-      let img = allMusic[i].img;
+      //let img = allMusic[i].img;
       let liTag = `<li li-index="${i + 1}">
                         <div class="row" style="display: flex; justify-content: space-between; align-items: center;">
                         <div>
                             <span>${allMusic[i].name}</span>
                             <p>${allMusic[i].album}</p>
-                        </div>
-                        <img src="${img}" alt="Album Cover" style="width: 100px;">
                         </div>
                   </li>`;
       ulTag.insertAdjacentHTML("beforeend", liTag); //inserting the li inside ul tag    
