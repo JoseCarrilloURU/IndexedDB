@@ -42,11 +42,15 @@ export class SongManager {
             name = fileName;
             console.log("nombre de cancion vacio, se ha cambiado a", name);
         }
+<<<<<<< HEAD
         if(!img || img==""){
             img = this.defaultimg;
             console.log("img de cancion vacio, se ha cambiado a", this.defaultimg);
         }
         let request = store.add({id: this.idforNewSong, name: name, author: author, album: album, file: file,img: img});
+=======
+        let request = store.add({id: this.idforNewSong, name: name, author: author, album: album, file: file,img: img, isFavorite: false});
+>>>>>>> 84bef4b86e09ccbe921cf6da4b327829084bcd11
         request.onsuccess = (e)=> {
             this.songs.push(this.idforNewSong++)
             console.log("Canción añadida con éxito");
@@ -107,7 +111,7 @@ export class SongManager {
 
         if(this.audio==null){
             console.log("cambiando cancion ore", 1);
-            this.audioId=1 //! mientras no haya cancion lista de cancioes
+            this.audioId=1 //! mientras no haya cancion lista de canciones
             await this.setSong(this.audioId);
         }
 
