@@ -115,22 +115,36 @@ moreMusicBtn.addEventListener("click", async ()=>{
     allMusic = await songManager.getAllSongs();
     const ulTag = wrapper.querySelector("ul");
     ulTag.innerHTML = ''; // Vacía el contenido de ulTag
-    // let create li tags according to array length for list
-    for (let i = 0; i < allMusic.length; i++) {
-      //let's pass the song name, artist from the array
-      //let img = allMusic[i].img;
-      let liTag = `<li li-index="${i + 1}">
-                        <div class="row" style="display: flex; justify-content: space-between; align-items: center;">
-                        <div>
-                            <span>${allMusic[i].name}</span>
-                            <p>${allMusic[i].album}</p>
-                        </div>
-                  </li>`;
-      ulTag.insertAdjacentHTML("beforeend", liTag); //inserting the li inside ul tag    
 
+    if(allMusic.length==0){
+        console.log("No hay canciones");
+        let liTag =  `<li li-index="1">
+        <div class="row" style="display: flex; justify-content: space-between; align-items: center;">
+        <div>
+            <span>sss</span>
+            <p>dd</p>
+        </div>
+        <button id= class="uploadBtn-li">Upload</button>
+    </li>`;
+        ulTag.insertAdjacentHTML("beforeend", liTag); //inserting the li inside ul tag
+    }else{
+        // let create li tags according to array length for list
+        for (let i = 0; i < allMusic.length; i++) {
+        //let's pass the song name, artist from the array
+        //let img = allMusic[i].img;
+        let liTag = `<li li-index="${i + 1}">
+                            <div class="row" style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <span>${allMusic[i].name}</span>
+                                <p>${allMusic[i].album}</p>
+                            </div>
+                    </li>`;
+        ulTag.insertAdjacentHTML("beforeend", liTag); //inserting the li inside ul tag    
+
+        }
+
+        musicList.classList.toggle("show");
     }
-
-    musicList.classList.toggle("show");
 });
 
 closemoreMusic.addEventListener("click", ()=>{
