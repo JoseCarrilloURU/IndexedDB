@@ -1,5 +1,9 @@
 import {SongManager} from './songManager.js';
 import * as mm from 'music-metadata-browser';
+import { Buffer } from 'buffer';
+import process from 'process';
+window.Buffer = Buffer;
+window.process = process;
 
 const wrapper = document.querySelector(".wrapper"),
 editBtn = wrapper.querySelector("#edit"),
@@ -23,7 +27,7 @@ uploadBtn = wrapper.querySelector("#upload");
 let songManager;
 let id = 1;
 
-//indexedDB.deleteDatabase("MusicDatabase");
+indexedDB.deleteDatabase("MusicDatabase");
 let audio = document.getElementById('audio');
 
 
@@ -54,10 +58,24 @@ uploadBtn.addEventListener('click', ()=>{
     const fileInput = document.createElement('input');
     fileInput.type = 'file';
     fileInput.accept = 'audio/*';
-    fileInput.onchange = function() {
+    fileInput.onchange = async function() {
         const file = this.files[0];
 
-        songManager.addSong(file);
+        try {
+            const metadata = await mm.parseBlob(file);
+            let nombre = metadata.common.title;
+            let artista = metadata.common.artist;
+            let album = metadata.common.album;
+            let img= null;
+            if (metadata.common.picture && metadata.common.picture[0]) {
+                img = metadata.common.picture[0];
+                
+            }
+            songManager.addSong(file,nombre,artista,album, img);
+        } catch (error) {
+            console.error(error);
+        }
+
     };
     fileInput.click();
 });
@@ -66,6 +84,7 @@ playPauseBtn.addEventListener('click', ()=> {
     console.log("playButton clicked");
     songManager.playSong();
 
+    
 });
 
 
@@ -93,12 +112,15 @@ moreMusicBtn.addEventListener("click", async ()=>{
     // let create li tags according to array length for list
     for (let i = 0; i < allMusic.length; i++) {
       //let's pass the song name, artist from the array
+      let img = allMusic[i].img;
       let liTag = `<li li-index="${i + 1}">
-                    <div class="row">
-                      <span>${allMusic[i].name}</span>
-                      <p>${allMusic[i].album}</p>
-                    </div>
-
+                        <div class="row" style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <span>${allMusic[i].name}</span>
+                            <p>${allMusic[i].album}</p>
+                        </div>
+                        <img src="${img}" alt="Album Cover" style="width: 100px;">
+                        </div>
                   </li>`;
       ulTag.insertAdjacentHTML("beforeend", liTag); //inserting the li inside ul tag    
 

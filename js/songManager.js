@@ -9,7 +9,7 @@ export class SongManager {
         this.setNewLastSongID();
         this.fillSongsWithIds();
     
-
+        this.img = null;
         this.audioId = null;
         this.audio=null;
 
@@ -17,8 +17,8 @@ export class SongManager {
     }
 
     //añade cancion id 0
-    addSong(file,name,author,album) {
-        console.log("añadiendo cancion",this.idforNewSong, name, author, album, file);
+    addSong(file,name,author,album,img) {
+        console.log("añadiendo cancion",this.idforNewSong,'nombre', name,'autor', author,'album', album,'file', file,'img', img);
         let transaction = this.db.transaction([this.storeName], "readwrite");
         let store = transaction.objectStore(this.storeName);
         console.log("nombre de cancion", name);
@@ -27,7 +27,7 @@ export class SongManager {
             name = fileName;
             console.log("nombre de cancion vacio, se ha cambiado a", name);
         }
-        let request = store.add({id: this.idforNewSong, name: name, author: author, album: album, file: file});
+        let request = store.add({id: this.idforNewSong, name: name, author: author, album: album, file: file,img: img});
         request.onsuccess = (e)=> {
             this.songs.push(this.idforNewSong++)
             console.log("Canción añadida con éxito");
@@ -55,6 +55,15 @@ export class SongManager {
                 let url = URL.createObjectURL(getRequest.result.file);
                 this.audioId = id;
                 this.audio = new Audio(url);
+                let imagen = getRequest.result.img;
+                this.img = URL.createObjectURL(new Blob([imagen.data], { type: imagen.format }));
+                console.log("cambiando ", this.img);
+                let musicImg = document.querySelector(".wrapper").querySelector(".img-area img");//!acople???????????
+
+                console.log("cambiando ", musicImg);
+                if (musicImg) {
+                    musicImg.src = this.img
+                }
                 console.log("Canción obtenida con éxito", getRequest.result.file);
                 this.audioChange = false;
 
@@ -136,7 +145,8 @@ export class SongManager {
                     id: song.id,
                     name: song.name,
                     artist: song.author,
-                    img: song.album,
+                    album: song.album,
+                    img: URL.createObjectURL(new Blob([song.img.data], { type: song.img.format })),
                     file: song.file
                 }));
 
@@ -220,8 +230,6 @@ export class SongManager {
             console.log('Error', e.target.error.name);
         };
     }
-
-    
 
     
     
