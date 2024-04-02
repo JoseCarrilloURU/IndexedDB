@@ -99,7 +99,7 @@ export class SongManager {
         }
 
         if(this.audioChange){
-        await this.setSong(this.audioId);
+            await this.setSong(this.audioId);
         }
 
         if (this.audio.currentTime > 0 ) {
@@ -116,6 +116,7 @@ export class SongManager {
         }else{
             console.log("playing", this.audioId);
             this.audio.play();
+            playPause.querySelector("i").innerText = "pause";
         }
         
     }
