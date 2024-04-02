@@ -1,4 +1,4 @@
-class SongManager {
+export class SongManager {
     constructor(db, storeName) {
         this.db = db;
         this.storeName = storeName;

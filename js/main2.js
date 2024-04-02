@@ -1,3 +1,6 @@
+import {SongManager} from './songManager.js';
+import * as mm from 'music-metadata-browser';
+
 const wrapper = document.querySelector(".wrapper"),
 editBtn = wrapper.querySelector("#edit"),
 delBtn = wrapper.querySelector("#delete"),
