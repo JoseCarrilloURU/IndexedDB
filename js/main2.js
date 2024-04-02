@@ -35,10 +35,11 @@ open.onupgradeneeded = function() {
 
 //tomar valores del submit
 
-open.onsuccess = function() {
+open.onsuccess = ()=> {
     var db = open.result;
     songManager = new SongManager(db,"SongStore");
     console.log("La base de datos ha sido abierta con éxito y pasada a SongManager");
+    
 };
 open.onerror = function(e) {
     console.log("Error al abrir la base de datos", e.target.error);
@@ -53,7 +54,7 @@ uploadBtn.addEventListener('click', ()=>{
     fileInput.onchange = function() {
         const file = this.files[0];
 
-        songManager.addSong(file,'naem','autor','album');
+        songManager.addSong(file);
     };
     fileInput.click();
 });
@@ -64,10 +65,6 @@ playPauseBtn.addEventListener('click', ()=> {
 
 });
 
-moreMusicBtn.addEventListener('click', ()=> {
-    songManager.getAllSongs();   
-
-});
 
 prevBtn.addEventListener('click', ()=> {
     songManager.prevSong();
@@ -80,6 +77,34 @@ nextBtn.addEventListener('click', ()=> {
 delBtn.addEventListener('click', ()=> {
     console.log("deleteButton clicked");
     songManager.deleteSong(songManager.audioId);
+});
+
+let allMusic=null;
+const ulTag = wrapper.querySelector("ul");
+
+moreMusicBtn.addEventListener("click", async ()=>{
+    allMusic = await songManager.getAllSongs();
+    console.log('dddddddd',allMusic);
+    const ulTag = wrapper.querySelector("ul");
+    ulTag.innerHTML = ''; // Vacía el contenido de ulTag
+    // let create li tags according to array length for list
+    for (let i = 0; i < allMusic.length; i++) {
+      //let's pass the song name, artist from the array
+      let liTag = `<li li-index="${i + 1}">
+                    <div class="row">
+                      <span>${allMusic[i].name}</span>
+                      <p>${allMusic[i].album}</p>
+                    </div>
+
+                  </li>`;
+      ulTag.insertAdjacentHTML("beforeend", liTag); //inserting the li inside ul tag    
+
+    }
+
+    musicList.classList.toggle("show");
+});
+closemoreMusic.addEventListener("click", ()=>{
+  moreMusicBtn.click();
 });
 
 

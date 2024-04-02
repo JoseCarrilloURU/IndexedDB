@@ -21,6 +21,12 @@ class SongManager {
         console.log("añadiendo cancion",this.idforNewSong, name, author, album, file);
         let transaction = this.db.transaction([this.storeName], "readwrite");
         let store = transaction.objectStore(this.storeName);
+        console.log("nombre de cancion", name);
+        if(!name || name==""){
+            let fileName = file.name.split(".")[0];
+            name = fileName;
+            console.log("nombre de cancion vacio, se ha cambiado a", name);
+        }
         let request = store.add({id: this.idforNewSong, name: name, author: author, album: album, file: file});
         request.onsuccess = (e)=> {
             this.songs.push(this.idforNewSong++)
@@ -111,8 +117,7 @@ class SongManager {
             }
             
             console.log("El objeto ha sido borrado con éxito", id);
-            console.log(this.songs); // imprime [1, 2, 4, 5]
-            
+            console.log(this.songs); 
         };
     
         request.onerror = function(e) {
@@ -121,16 +126,29 @@ class SongManager {
     }
 
     getAllSongs() {
-        let transaction = this.db.transaction([this.storeName], "readonly");
-        let store = transaction.objectStore(this.storeName);
-        let getAllRequest = store.getAll();
-        getAllRequest.onsuccess = ()=> {
-            let songs = getAllRequest.result;
-            console.log(songs)
-        };
-        getAllRequest.onerror = function(e) {
-            console.log('Error', e.target.error.name);
-        };
+        return new Promise((resolve, reject) => {
+            let transaction = this.db.transaction([this.storeName], "readonly");
+            let store = transaction.objectStore(this.storeName);
+            let getAllRequest = store.getAll();
+
+            getAllRequest.onsuccess = () => {
+                let arrsongs = getAllRequest.result.map(song => ({
+                    id: song.id,
+                    name: song.name,
+                    artist: song.author,
+                    img: song.album,
+                    file: song.file
+                }));
+
+                console.log(arrsongs);
+                resolve(arrsongs); // Resuelve la promesa con arrsongs
+            };
+
+            getAllRequest.onerror = function(e) {
+                console.log('Error', e.target.error.name);
+                reject(e.target.error.name); // Rechaza la promesa con el error
+            };
+        });
     }
 
     setNewLastSongID() {
