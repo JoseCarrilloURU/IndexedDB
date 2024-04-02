@@ -133,6 +133,7 @@ export class SongManager {
             
             console.log("El objeto ha sido borrado con éxito", id);
             console.log(this.songs); 
+            this.nextSong();
         };
     
         request.onerror = function(e) {
@@ -188,13 +189,15 @@ export class SongManager {
 
     nextSong() {
 
+
         if (!(this.audioId >= Math.max.apply(null, this.songs))){
             this.audioId++;
             while (!this.songs.includes(this.audioId)) {
                 console.log("entra")
                 this.audioId++;
             }
-
+        }else{
+            this.audioId = Math.min.apply(null, this.songs);
         }
         this.audioChange = true;
         this.playSong(this.audioId);
@@ -209,6 +212,8 @@ export class SongManager {
                 console.log("entra")
                 this.audioId--;
             }
+        }else{
+            this.audioId = Math.max.apply(null, this.songs);
         }
         this.audioChange = true;
         this.playSong(this.audioId);
