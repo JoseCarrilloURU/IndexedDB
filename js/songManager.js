@@ -2,26 +2,28 @@ class SongManager {
     constructor(db, storeName) {
         this.db = db;
         this.storeName = storeName;
-        this.id = 0;
 
+        this.audioChange = false;
+
+        this.idforNewSong = null;
+        this.setNewLastSongID();
+        this.fillSongsWithIds();
+    
+
+        this.audioId = null;
         this.audio=null;
-        this.getSongCount();
+
         console.log("SongManager creado");
     }
 
     //añade cancion id 0
     addSong(file,name,author,album) {
-        console.log("añadiendo cancion",this.id);
+        console.log("añadiendo cancion",this.idforNewSong, name, author, album, file);
         let transaction = this.db.transaction([this.storeName], "readwrite");
         let store = transaction.objectStore(this.storeName);
-        if(name==''){
-            let fileName = file.name.split('.')[0]; // get the file name without the extension
-            name = fileName
-            console.log("name durante",name);
-        }
-
-        let request = store.add({id: this.id++, name: name, author: author, album: album, file: file});
-        request.onsuccess = function(e) {
+        let request = store.add({id: this.idforNewSong, name: name, author: author, album: album, file: file});
+        request.onsuccess = (e)=> {
+            this.songs.push(this.idforNewSong++)
             console.log("Canción añadida con éxito");
         };
         request.onerror = function(e) {
@@ -29,51 +31,68 @@ class SongManager {
         };
     }
 
-    /*
-    let url = URL.createObjectURL(getRequest.result.file);
-    // Crear un nuevo elemento de audio y reproducir el archivo
-    let audio = new Audio(url);
-    audio.play();
-    */
 
-    /*
-        let getRequest = store.get(0);
-        getRequest.onsuccess = function() {
-            // Imprime el resultado de la solicitud get
-            console.log(getRequest.result.file); // {id: 1, name: "John Doe"}
-            let url = URL.createObjectURL(getRequest.result.file);
-            // Crear un nuevo elemento de audio y reproducir el archivo
-            let audio = new Audio(url);
-            audio.play();
+    setSong(id) {
+        return new Promise((resolve, reject) => {
+            console.log("cambiando cancion", this.audio);
+            if(this.audio!=null){
+                console.log("parando cancion y cambiando a", id);
+                this.audio.currentTime = 0;
+                this.audio.pause();
+            }
 
-        };
-    */
+            let transaction = this.db.transaction([this.storeName], "readonly");
+            let store = transaction.objectStore(this.storeName);
+            let getRequest = store.get(id);
+            getRequest.onsuccess = ()=> {
+    
+                let url = URL.createObjectURL(getRequest.result.file);
+                this.audioId = id;
+                this.audio = new Audio(url);
+                console.log("Canción obtenida con éxito", getRequest.result.file);
+                this.audioChange = false;
 
-    playSong(id) {
-        let transaction = this.db.transaction([this.storeName], "readonly");
-        let store = transaction.objectStore(this.storeName);
-        console.log("playing id",id);
-        let getRequest = store.get(id);
-        getRequest.onsuccess = ()=> {
-            // Imprime el resultado de la solicitud get
-
-            console.log(getRequest.result.file); // {id: 1, name: "John Doe"}
-            let url = URL.createObjectURL(getRequest.result.file);
-            // Crear un nuevo elemento de audio y reproducir el archivo
-            this.audio = new Audio(url);
-            this.audio.play();
-            
-        };
-        getRequest.onerror = function(e) {
-            console.log("Error al obtener la canción", e.target.error);
-        };
+                resolve();
+            };
+            getRequest.onerror = function(e) {
+                console.log("Error al obtener la canción", e.target.error);
+                reject(e.target.error);
+            };
+        });
     }
 
-    stopSong() {
-        this.audio.pause();
-    }   
+    async playSong(){
+        if(this.audio==null ){
+            console.log("cambiando cancion ore", 1);
+            this.audioId=1 //! mientras no haya cancion lista de cancioes
+            await this.setSong(this.audioId);
+        }
+
+        if(this.audioChange){
+        await this.setSong(this.audioId);
+        }
+
+
+        if (this.audio.currentTime > 0 ) {
+
+            if (!this.audio.paused) {
+                console.log("pause", this.audioId);
+                this.audio.pause();
+            } else {
+                console.log("play", this.audioId);
+                this.audio.play();
+            }
+        }else{
+            console.log("playing", this.audioId);
+            this.audio.play();
+        }
+        
+    }
+
+ 
 
     deleteSong(id) {
+        console.log("borrando cancion", id);
         // Abre una transacción de lectura/escritura en la base de datos
         let transaction = this.db.transaction([this.storeName], "readwrite");
     
@@ -84,8 +103,16 @@ class SongManager {
         let request = store.delete(id);
 
     
-        request.onsuccess = function(e) {
+        request.onsuccess =(e) =>{
+            
+            let index = this.songs.indexOf(id);
+            if (index !== -1) {
+                this.songs.splice(index, 1);
+            }
+            
             console.log("El objeto ha sido borrado con éxito", id);
+            console.log(this.songs); // imprime [1, 2, 4, 5]
+            
         };
     
         request.onerror = function(e) {
@@ -99,42 +126,84 @@ class SongManager {
         let getAllRequest = store.getAll();
         getAllRequest.onsuccess = ()=> {
             let songs = getAllRequest.result;
-            let songList = document.getElementById('song-list');
-            songList.innerHTML = ''; // clear the list
-            songs.forEach(song => {
-                let listItem = document.createElement('button');
-                listItem.textContent = song.id + ': ' + song.name; // display the song id and name
-                listItem.addEventListener('click', ()=> {
-                    if (this.audio){
-                        this.audio.pause();
-                        this.audio.currentTime = 0;
-                    }
-                    console.log('Playing song', song.id);
-                    this.playSong(song.id);
-                });
-                songList.appendChild(listItem);
-            });
+            console.log(songs)
         };
         getAllRequest.onerror = function(e) {
             console.log('Error', e.target.error.name);
         };
     }
 
-    getSongCount() {
+    setNewLastSongID() {
         let transaction = this.db.transaction([this.storeName], 'readonly');
         let store = transaction.objectStore(this.storeName);
         let request = store.openCursor(null, 'prev');
         
         request.onsuccess = (e) => {
-            let cursor = e.target.result;
-            if (cursor) {
-                this.id = cursor.value.id + 1;
+             let cursor= e.target.result;
+             let lastId= cursor? cursor.value.id: null;
+            if(typeof lastId === 'number' && !isNaN(lastId)){
+                this.idforNewSong = lastId + 1;
+            }else{
+                this.idforNewSong = 1;
             }
         };
         request.onerror = (e) =>{
             console.log('Error', e.target.error.name);
         };
     }
+
+    nextSong() {
+
+        if (!(this.audioId >= Math.max.apply(null, this.songs))){
+            this.audioId++;
+            while (!this.songs.includes(this.audioId)) {
+                console.log("entra")
+                this.audioId++;
+            }
+
+        }
+        this.audioChange = true;
+        this.playSong(this.audioId);
+    }
+
+    prevSong() {
+
+        if (!(this.audioId <= Math.min.apply(null, this.songs))){
+            this.audioId--;
+
+            while (!this.songs.includes(this.audioId)) {
+                console.log("entra")
+                this.audioId--;
+            }
+        }
+        this.audioChange = true;
+        this.playSong(this.audioId);
+    }
+
+    fillSongsWithIds() {
+        let transaction = this.db.transaction([this.storeName], 'readonly');
+        let store = transaction.objectStore(this.storeName);
+        let request = store.openCursor();
+
+        this.songs = []; // Vacía la lista de canciones antes de llenarla
+
+        request.onsuccess = (e) => {
+            let cursor = e.target.result;
+            if (cursor) {
+                this.songs.push(cursor.value.id); // Agrega el id al array de canciones
+                cursor.continue(); // Continúa al siguiente registro
+            } else {
+                
+                console.log("Canciones cargadas con éxito", this.songs);
+            }
+        };
+
+        request.onerror = (e) => {
+            console.log('Error', e.target.error.name);
+        };
+    }
+
+    
 
     
     
