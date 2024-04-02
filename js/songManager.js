@@ -242,6 +242,32 @@ export class SongManager {
         };
     }
 
+    uploadSong() {
+        const fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.accept = 'audio/*';
+        fileInput.onchange = async function() {
+            const file = this.files[0];
+    
+            try {
+                const metadata = await mm.parseBlob(file);
+                let nombre = metadata.common.title;
+                let artista = metadata.common.artist;
+                let album = metadata.common.album;
+                //let year = metadata.common.year;
+                let img= null;
+                if (metadata.common.picture && metadata.common.picture[0]) {
+                    img = metadata.common.picture[0];
+                }
+                this.addSong(file,nombre,artista,album, img);
+            } catch (error) {
+                console.error(error);
+            }
+    
+        };
+        fileInput.click();
+    }
+
     
     
 

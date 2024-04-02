@@ -55,29 +55,8 @@ open.onerror = function(e) {
 
 uploadBtn.addEventListener('click', ()=>{
     console.log("uploadButton clicked");
-    const fileInput = document.createElement('input');
-    fileInput.type = 'file';
-    fileInput.accept = 'audio/*';
-    fileInput.onchange = async function() {
-        const file = this.files[0];
+    songManager.uploadSong();
 
-        try {
-            const metadata = await mm.parseBlob(file);
-            let nombre = metadata.common.title;
-            let artista = metadata.common.artist;
-            let album = metadata.common.album;
-            //let year = metadata.common.year;
-            let img= null;
-            if (metadata.common.picture && metadata.common.picture[0]) {
-                img = metadata.common.picture[0];
-            }
-            songManager.addSong(file,nombre,artista,album, img);
-        } catch (error) {
-            console.error(error);
-        }
-
-    };
-    fileInput.click();
 });
 
 playPauseBtn.addEventListener('click', ()=> {
@@ -111,16 +90,16 @@ moreMusicBtn.addEventListener("click", async ()=>{
 
     if(allMusic.length==0){
         console.log("No hay canciones");
-        let liTag =  `<li li-index="1">
-        <div class="row" style="display: flex; justify-content: space-between; align-items: center;">
-        <div>
-            <span>sss</span>
-            <p>dd</p>
-        </div>
-        <button id= class="uploadBtn-li">Upload</button>
-    </li>`;
+        let liTag =  `
+        <div   style="display: flex; justify-content: center; align-items: center; ">Agregar Canciones</div>
+        <i id="uploadnew" class="material-icons" title="Upload Songs" style="display: flex; justify-content: center; align-items: center; height: 30vh; font-size: 100px;">upload_file</i>
+        `;
         ulTag.insertAdjacentHTML("beforeend", liTag); //inserting the li inside ul tag
-    }else{
+        document.getElementById('uploadnew').addEventListener('click', function() {
+            console.log("uploadButton clicked no songs");
+            songManager.uploadSong();
+        });
+    }else{  
         // let create li tags according to array length for list
         for (let i = 0; i < allMusic.length; i++) {
         //let's pass the song name, artist from the array
@@ -136,8 +115,8 @@ moreMusicBtn.addEventListener("click", async ()=>{
 
         }
 
-        musicList.classList.toggle("show");
     }
+    musicList.classList.toggle("show");
 });
 closemoreMusic.addEventListener("click", ()=>{
   moreMusicBtn.click();
