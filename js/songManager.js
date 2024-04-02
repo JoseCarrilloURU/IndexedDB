@@ -89,6 +89,9 @@ export class SongManager {
     }
 
     async playSong(){
+
+        let playPause = document.querySelector(".wrapper").querySelector(".play-pause");
+
         if(this.audio==null){
             console.log("cambiando cancion ore", 1);
             this.audioId=1 //! mientras no haya cancion lista de cancioes
@@ -99,15 +102,16 @@ export class SongManager {
         await this.setSong(this.audioId);
         }
 
-
         if (this.audio.currentTime > 0 ) {
 
             if (!this.audio.paused) {
                 console.log("pause", this.audioId);
                 this.audio.pause();
+                playPause.querySelector("i").innerText = "play_arrow";
             } else {
                 console.log("play", this.audioId);
                 this.audio.play();
+                playPause.querySelector("i").innerText = "pause";
             }
         }else{
             console.log("playing", this.audioId);
