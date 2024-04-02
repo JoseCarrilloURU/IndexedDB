@@ -1,0 +1,20 @@
+1. Crear lista de favoritos
+    1.1. Crear nueva pestaña de lista y cerrar la anterior (lista de canciones)  
+    1.2. Cambiar listas al hacer click en botón de lista de canciones
+    1.3. Si se quita la estrella de una canción, se elimina la canción de favoritos,
+    y se devuelve a donde estaba la canción en la lista de no favoritos (y se para por default).
+    1.4.
+
+2. Imagen de canción: Toma foto camniada, else toma foto de metadata, else toma foto en carpeta img, else img por defecto
+Botón de cambiar foto que sobreescribe la metadata
+
+3. Añadir IndexedDB
+
+4. Botones y modales de editar información y eliminar canción
+
+
+Opcional.
+    1. Barra de volumen debajo de progreso? (Timestamps encima de barra de progreso) 
+    + Mover la imagen a circular que gire (Ver el otro Music Player)
+    
+    2. Pestaña por ID de álbum 
