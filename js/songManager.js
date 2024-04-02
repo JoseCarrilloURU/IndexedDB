@@ -58,7 +58,13 @@ export class SongManager {
                 let imagen = getRequest.result.img;
                 this.img = URL.createObjectURL(new Blob([imagen.data], { type: imagen.format }));
                 console.log("cambiando ", this.img);
+
                 let musicImg = document.querySelector(".wrapper").querySelector(".img-area img");//!acople???????????
+                let musicName = document.querySelector(".wrapper").querySelector(".song-details .name");
+                let musicArtist = document.querySelector(".wrapper").querySelector(".song-details .artist");
+                musicName.innerHTML = getRequest.result.name;
+                musicArtist.innerHTML = getRequest.result.artist;
+
 
                 console.log("cambiando ", musicImg);
                 if (musicImg) {
