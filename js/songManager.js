@@ -260,7 +260,7 @@ export class SongManager {
             try {
                 const metadata = await mm.parseBlob(file);
                 let nombre = metadata.common.title;
-                let artista = metadata.common.artist;
+                let artista = metadata.common.author;
                 let album = metadata.common.album;
                 //let year = metadata.common.year;
                 let img= null;
