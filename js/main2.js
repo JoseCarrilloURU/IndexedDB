@@ -22,7 +22,7 @@ uploadBtn = wrapper.querySelector("#upload");
 let songManager;
 let id = 1;
 
-//indexedDB.deleteDatabase("MusicDatabase");
+indexedDB.deleteDatabase("MusicDatabase");
 let audio = document.getElementById('audio');
 
 
@@ -99,7 +99,10 @@ moreMusicBtn.addEventListener("click", async ()=>{
         ulTag.insertAdjacentHTML("beforeend", liTag); //inserting the li inside ul tag
         document.getElementById('uploadnew').addEventListener('click', function() {
             console.log("uploadButton clicked no songs");
-            songManager.uploadSong();
+            songManager.uploadSong().then(() => {
+                console.log("Canción subida con éxito");
+                moreMusicBtn.click();
+            });
         });
     }else{  
         // let create li tags according to array length for list

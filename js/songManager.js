@@ -248,33 +248,37 @@ export class SongManager {
     }
 
     uploadSong() {
-        const self = this;
-        const fileInput = document.createElement('input');
-        fileInput.type = 'file';
-        fileInput.accept = 'audio/*';
-        fileInput.onchange = async function() {
-            const file = this.files[0];
+        return new Promise((resolve, reject) => {
+            const fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.accept = 'audio/*';
+            const self = this; // Define 'self' to refer to the SongManager instance
+            fileInput.onchange = async function() {
+                const file = this.files[0];
 
-    
-            try {
-                const metadata = await mm.parseBlob(file);
-                let nombre = metadata.common.title;
-                let artista = metadata.common.author;
-                let album = metadata.common.album;
-                //let year = metadata.common.year;
-                let img= null;
-                if (metadata.common.picture && metadata.common.picture[0]) {
-                    img = metadata.common.picture[0];
+                try {
+                    const metadata = await mm.parseBlob(file);
+                    let nombre = metadata.common.title;
+                    let artista = metadata.common.author;
+                    let album = metadata.common.album;
+                    let img= null;
+                    if (metadata.common.picture && metadata.common.picture[0]) {
+                        img = metadata.common.picture[0];
+                    }
+                    await self.addSong(file,nombre,artista,album, img); // Use 'self' instead of 'this'
+                    if(self.audioId==null){
+                        self.nextSong();
+                    }
+                    resolve(); // Resolve the promise when addSong has finished
+                } catch (error) {
+                    console.error(error);
+                    reject(error); // Reject the promise if there's an error
                 }
-                self.addSong(file,nombre,artista,album, img);
-            } catch (error) {
-                console.error(error);
-            }
-    
-        };
-        fileInput.click();
-    }
 
+            };
+            fileInput.click();
+        });
+    }
     
     
 
