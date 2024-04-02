@@ -27,7 +27,7 @@ uploadBtn = wrapper.querySelector("#upload");
 let songManager;
 let id = 1;
 
-indexedDB.deleteDatabase("MusicDatabase");
+//indexedDB.deleteDatabase("MusicDatabase");
 let audio = document.getElementById('audio');
 
 
