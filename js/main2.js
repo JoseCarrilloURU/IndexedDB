@@ -1,9 +1,4 @@
 import {SongManager} from './songManager.js';
-import * as mm from 'music-metadata-browser';
-import { Buffer } from 'buffer';
-import process from 'process';
-window.Buffer = Buffer;
-window.process = process;
 
 const wrapper = document.querySelector(".wrapper"),
 editBtn = wrapper.querySelector("#edit"),

@@ -1,3 +1,10 @@
+import * as mm from 'music-metadata-browser';
+import { Buffer } from 'buffer';
+import process from 'process';
+window.Buffer = Buffer;
+window.process = process;
+
+
 export class SongManager {
     constructor(db, storeName) {
         this.db = db;
@@ -63,7 +70,12 @@ export class SongManager {
                 let musicName = document.querySelector(".wrapper").querySelector(".song-details .name");
                 let musicArtist = document.querySelector(".wrapper").querySelector(".song-details .artist");
                 musicName.innerHTML = getRequest.result.name;
+<<<<<<< HEAD
                 musicArtist.innerHTML = getRequest.result.author; // Update to set the artist name
+=======
+                musicArtist.innerHTML = getRequest.result.author;
+
+>>>>>>> 085b2d34da1d7667672ef8c8aa2b264ddeaa0443
 
                 console.log("cambiando ", musicImg);
                 if (musicImg) {
@@ -241,23 +253,25 @@ export class SongManager {
     }
 
     uploadSong() {
+        const self = this;
         const fileInput = document.createElement('input');
         fileInput.type = 'file';
         fileInput.accept = 'audio/*';
         fileInput.onchange = async function() {
             const file = this.files[0];
+
     
             try {
                 const metadata = await mm.parseBlob(file);
                 let nombre = metadata.common.title;
-                let artista = metadata.common.artist;
+                let artista = metadata.common.author;
                 let album = metadata.common.album;
                 //let year = metadata.common.year;
                 let img= null;
                 if (metadata.common.picture && metadata.common.picture[0]) {
                     img = metadata.common.picture[0];
                 }
-                this.addSong(file,nombre,artista,album, img);
+                self.addSong(file,nombre,artista,album, img);
             } catch (error) {
                 console.error(error);
             }
