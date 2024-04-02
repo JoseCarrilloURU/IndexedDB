@@ -89,7 +89,7 @@ export class SongManager {
     }
 
     async playSong(){
-        if(this.audio==null ){
+        if(this.audio==null){
             console.log("cambiando cancion ore", 1);
             this.audioId=1 //! mientras no haya cancion lista de cancioes
             await this.setSong(this.audioId);
