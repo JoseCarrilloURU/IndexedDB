@@ -90,7 +90,7 @@ export class SongManager {
     }
 
     async playSong(){
-        if(this.audio==null ){
+        if(this.audio==null){
             console.log("cambiando cancion ore", 1);
             this.audioId=1 //! mientras no haya cancion lista de cancioes
             await this.setSong(this.audioId);
@@ -260,7 +260,7 @@ export class SongManager {
             try {
                 const metadata = await mm.parseBlob(file);
                 let nombre = metadata.common.title;
-                let artista = metadata.common.author;
+                let artista = metadata.common.artist;
                 let album = metadata.common.album;
                 //let year = metadata.common.year;
                 let img= null;
