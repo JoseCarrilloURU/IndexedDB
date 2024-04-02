@@ -94,7 +94,7 @@ export class SongManager {
 
         if(this.audio==null){
             console.log("cambiando cancion ore", 1);
-            this.audioId=1 //! mientras no haya cancion lista de cancioes
+            this.audioId=1 //! mientras no haya cancion lista de canciones
             await this.setSong(this.audioId);
         }
 

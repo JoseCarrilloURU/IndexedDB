@@ -212,6 +212,14 @@ body{
   position: absolute;
 }
 
+.uploadnew{
+display: flex;
+justify-content: center; 
+align-items: center; 
+height: 30vh; 
+font-size: 100px;
+}
+
 .header .row{
   display: flex;
   align-items: center;

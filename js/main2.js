@@ -93,8 +93,8 @@ moreMusicBtn.addEventListener("click", async ()=>{
     if(allMusic.length==0){
         console.log("No hay canciones");
         let liTag =  `
-        <div   style="display: flex; justify-content: center; align-items: center; ">Agregar Canciones</div>
-        <i id="uploadnew" class="material-icons" title="Upload Songs" style="display: flex; justify-content: center; align-items: center; height: 30vh; font-size: 100px;">upload_file</i>
+        <i id="uploadnew" class="material-icons" title="Upload Songs">audio_file</i>
+        <h1 style="display: flex; justify-content: center; align-items: center; ">SUBIR CANCIÓN</h1>
         `;
         ulTag.insertAdjacentHTML("beforeend", liTag); //inserting the li inside ul tag
         document.getElementById('uploadnew').addEventListener('click', function() {
