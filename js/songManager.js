@@ -70,13 +70,8 @@ export class SongManager {
                 let musicName = document.querySelector(".wrapper").querySelector(".song-details .name");
                 let musicArtist = document.querySelector(".wrapper").querySelector(".song-details .artist");
                 musicName.innerHTML = getRequest.result.name;
-<<<<<<< HEAD
-                musicArtist.innerHTML = getRequest.result.author; // Update to set the artist name
-=======
                 musicArtist.innerHTML = getRequest.result.author;
-
->>>>>>> 085b2d34da1d7667672ef8c8aa2b264ddeaa0443
-
+                
                 console.log("cambiando ", musicImg);
                 if (musicImg) {
                     musicImg.src = this.img
