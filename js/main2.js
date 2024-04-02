@@ -32,25 +32,34 @@ let audio = document.getElementById('audio');
 
 
 // Open (or create) the database
-let open = indexedDB.open("MusicDatabase", 1);
+let dbRequest = indexedDB.open("MusicDatabase", 1);
 
 // Create the schema
-open.onupgradeneeded = function() {
-    let db = open.result;
+dbRequest.onupgradeneeded = function() {
+    let db = dbRequest.result;
     db.createObjectStore("SongStore", {keyPath: "id"});
 };
 
 //tomar valores del submit
 
-open.onsuccess = ()=> {
-    var db = open.result;
-    songManager = new SongManager(db,"SongStore");
-    console.log("La base de datos ha sido abierta con éxito y pasada a SongManager");
-    
-};
-open.onerror = function(e) {
-    console.log("Error al abrir la base de datos", e.target.error);
-};
+// open.onsuccess = ()=> {
+//     let db = open.result;
+//     songManager = new SongManager(db,"SongStore");
+//     console.log("La base de datos ha sido abierta con éxito y pasada a SongManager");
+// };
+
+let dbPromise = new Promise((resolve, reject) => {
+    dbRequest.onsuccess = function(event) {
+        let db = dbRequest.result;
+        songManager = new SongManager(db,"SongStore");
+        console.log("La base de datos ha sido abierta con éxito y pasada a SongManager");
+      resolve(event.target.result);
+    };
+
+    dbRequest.onerror = function(event) {
+        console.log("Error al abrir la base de datos", e.target.error);
+      };
+    });
 
 
 uploadBtn.addEventListener('click', ()=>{
@@ -63,9 +72,7 @@ playPauseBtn.addEventListener('click', ()=> {
     console.log("playButton clicked");
     songManager.playSong();
 
-    
 });
-
 
 prevBtn.addEventListener('click', ()=> {
     songManager.prevSong();
@@ -118,8 +125,23 @@ moreMusicBtn.addEventListener("click", async ()=>{
     }
     musicList.classList.toggle("show");
 });
+
 closemoreMusic.addEventListener("click", ()=>{
   moreMusicBtn.click();
 });
 
+// window.onload = async function() {
+//     await ();
+//     console.log("onload")
+//     moreMusicBtn.click();
+//   };
 
+window.onload = async function() {
+    try {
+      await dbPromise;
+      console.log("Database opened successfully.");
+      moreMusicBtn.click();
+    } catch (error) {
+      console.error("Error: ", error);
+    }
+  };
