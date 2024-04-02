@@ -1,3 +1,10 @@
+import * as mm from 'music-metadata-browser';
+import { Buffer } from 'buffer';
+import process from 'process';
+window.Buffer = Buffer;
+window.process = process;
+
+
 export class SongManager {
     constructor(db, storeName) {
         this.db = db;
@@ -242,11 +249,13 @@ export class SongManager {
     }
 
     uploadSong() {
+        const self = this;
         const fileInput = document.createElement('input');
         fileInput.type = 'file';
         fileInput.accept = 'audio/*';
         fileInput.onchange = async function() {
             const file = this.files[0];
+
     
             try {
                 const metadata = await mm.parseBlob(file);
@@ -258,7 +267,7 @@ export class SongManager {
                 if (metadata.common.picture && metadata.common.picture[0]) {
                     img = metadata.common.picture[0];
                 }
-                this.addSong(file,nombre,artista,album, img);
+                self.addSong(file,nombre,artista,album, img);
             } catch (error) {
                 console.error(error);
             }
