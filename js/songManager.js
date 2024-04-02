@@ -122,7 +122,6 @@ export class SongManager {
     
         // Borra el objeto con el id proporcionado
         let request = store.delete(id);
-
     
         request.onsuccess =(e) =>{
             
@@ -236,10 +235,5 @@ export class SongManager {
             console.log('Error', e.target.error.name);
         };
     }
-
-    
-    
-
-
 }
 

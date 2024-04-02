@@ -5,7 +5,7 @@
     y se devuelve a donde estaba la canción en la lista de no favoritos (y se para por default).
     1.4.
 
-2. Imagen de canción: Toma foto camniada, else toma foto de metadata, else toma foto en carpeta img, else img por defecto
+2. Imagen de canción: Toma foto cambiada, else toma foto de metadata, else toma foto en carpeta img, else img por defecto
 Botón de cambiar foto que sobreescribe la metadata
 
 3. Añadir IndexedDB
