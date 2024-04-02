@@ -19,6 +19,14 @@ export class SongManager {
         this.img = null;
         this.audioId = null;
         this.audio=null;
+        this.defaultimg = null;
+        this.imgDefault("images/default1.jpg").then(imageObject => {
+            this.defaultimg = imageObject;
+            console.log("Imagen por defecto cargada", imageObject);
+        }).catch(error => {
+            console.error("Error al cargar la imagen por defecto", error);
+        });
+        console.log(this.defaultimg);
 
         console.log("SongManager creado");
     }
@@ -34,6 +42,10 @@ export class SongManager {
             name = fileName;
             console.log("nombre de cancion vacio, se ha cambiado a", name);
         }
+        if(!img || img==""){
+            img = this.defaultimg;
+            console.log("img de cancion vacio, se ha cambiado a", this.defaultimg);
+        }
         let request = store.add({id: this.idforNewSong, name: name, author: author, album: album, file: file,img: img});
         request.onsuccess = (e)=> {
             this.songs.push(this.idforNewSong++)
@@ -42,6 +54,7 @@ export class SongManager {
         request.onerror = function(e) {
             console.log("Error al añadir la canción", e.target.error);
         };
+        
     }
 
 
@@ -156,6 +169,7 @@ export class SongManager {
             let transaction = this.db.transaction([this.storeName], "readonly");
             let store = transaction.objectStore(this.storeName);
             let getAllRequest = store.getAll();
+            let img = null;
 
             getAllRequest.onsuccess = () => {
                 let arrsongs = getAllRequest.result.map(song => ({
@@ -163,7 +177,6 @@ export class SongManager {
                     name: song.name,
                     artist: song.author,
                     album: song.album,
-                    img: URL.createObjectURL(new Blob([song.img.data], { type: song.img.format })),
                     file: song.file
                 }));
 
@@ -284,8 +297,74 @@ export class SongManager {
             fileInput.click();
         });
     }
-    
-    
+
+
+    changePic(){
+        return new Promise((resolve, reject) => {
+            const fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.accept = 'image/jpeg, image/png';
+            const self = this; // Define 'self' to refer to the SongManager instance
+            fileInput.onchange = async function() {
+                const file = this.files[0];
+
+
+                
+                try {
+                    let transaction = self.db.transaction([self.storeName], "readwrite");
+                    let store = transaction.objectStore(self.storeName);
+                    let getRequest = store.get(self.audioId);
+                    getRequest.onsuccess = ()=> {
+                        console.log("cambiando imagen", file);
+                        getRequest.result.img = file;
+                        let request = store.put(getRequest.result);
+                        request.onsuccess = (e)=> {
+                            console.log("Imagen cambiada con éxito");
+                            resolve();
+                        };
+                        request.onerror = function(e) {
+                            console.log("Error al cambiar la imagen", e.target.error);
+                            reject(e.target.error);
+                        };
+                    };
+                } catch (error) {
+                    console.error(error);
+                    reject(error); // Reject the promise if there's an error
+                }
+
+            };
+            fileInput.click();
+        });
+    }
+
+
+    imgDefault = function (path) {
+        return new Promise((resolve, reject) => {
+            fetch(path)
+                .then(response => response.blob())
+                .then(blob => {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        const arrayBuffer = event.target.result;
+                        const data = new Uint8Array(arrayBuffer);
+                        const imageObject = {
+                            format: 'image/png',
+                            type: 'Cover (front)',
+                            description: 'attached picture',
+                            data: data
+                        };
+                        resolve(imageObject);
+                    };
+                    reader.onerror = function(error) {
+                        reject(error);
+                    };
+                    reader.readAsArrayBuffer(blob);
+                })
+                .catch(error => {
+                    reject(error);
+                });
+        });
+    }
 
 
 }

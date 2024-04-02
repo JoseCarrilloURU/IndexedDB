@@ -17,7 +17,8 @@ musicList = wrapper.querySelector(".music-list"),
 moreMusicBtn = wrapper.querySelector("#more-music"),
 togglefavBtn = musicList.querySelector("#toggle-fav"),
 closemoreMusic = musicList.querySelector("#close"),
-uploadBtn = wrapper.querySelector("#upload");
+uploadBtn = wrapper.querySelector("#upload"),
+changeImgBtn = wrapper.querySelector("#changePic");
 
 let songManager;
 let id = 1;
@@ -75,6 +76,11 @@ prevBtn.addEventListener('click', ()=> {
 
 nextBtn.addEventListener('click', ()=> {
     songManager.nextSong();
+});
+
+changePic.addEventListener('click', ()=> {
+    console.log("changePic clicked");
+    songManager.changePic();
 });
 
 delBtn.addEventListener('click', ()=> {
