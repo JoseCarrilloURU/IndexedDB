@@ -34,7 +34,7 @@ export class SongManager {
             name = fileName;
             console.log("nombre de cancion vacio, se ha cambiado a", name);
         }
-        let request = store.add({id: this.idforNewSong, name: name, author: author, album: album, file: file,img: img});
+        let request = store.add({id: this.idforNewSong, name: name, author: author, album: album, file: file,img: img, isFavorite: false});
         request.onsuccess = (e)=> {
             this.songs.push(this.idforNewSong++)
             console.log("Canción añadida con éxito");
