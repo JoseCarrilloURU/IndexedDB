@@ -4,9 +4,9 @@ const wrapper = document.querySelector(".wrapper"),
 editBtn = wrapper.querySelector("#edit"),
 delBtn = wrapper.querySelector("#delete"),
 favBtn = wrapper.querySelector("#favorite"),
-musicImg = wrapper.querySelector(".img-area img"),
-musicName = wrapper.querySelector(".song-details .name"),
-musicArtist = wrapper.querySelector(".song-details .artist"),
+musicImg = wrapper.querySelector(".img-area img"), // 
+musicName = wrapper.querySelector(".song-details .name"), // 
+musicArtist = wrapper.querySelector(".song-details .artist"), //
 playPauseBtn = wrapper.querySelector(".play-pause"),
 prevBtn = wrapper.querySelector("#prev"),
 nextBtn = wrapper.querySelector("#next"),
@@ -21,12 +21,10 @@ uploadBtn = wrapper.querySelector("#upload"),
 changeImgBtn = wrapper.querySelector("#changePic");
 
 let songManager;
-let id = 1;
+
+
 
 //indexedDB.deleteDatabase("MusicDatabase");
-let audio = document.getElementById('audio');
-
-
 // Open (or create) the database
 let dbRequest = indexedDB.open("MusicDatabase", 1);
 
@@ -47,7 +45,7 @@ let dbPromise = new Promise((resolve, reject) => {
     dbRequest.onerror = function(event) {
         console.log("Error al abrir la base de datos", e.target.error);
       };
-    });
+});
 
 
 
@@ -82,12 +80,8 @@ delBtn.addEventListener('click', ()=> {
     songManager.deleteSong(songManager.audioId);
 });
 
-let allMusic=null;
-const ulTag = wrapper.querySelector("ul");
-
-
 moreMusicBtn.addEventListener("click", async ()=>{
-    allMusic = await songManager.getAllSongs();
+    let allMusic = await songManager.getAllSongs();
     const ulTag = wrapper.querySelector("ul");
     ulTag.innerHTML = ''; // Vacía el contenido de ulTag
 
@@ -163,10 +157,6 @@ closemoreMusic.addEventListener("click", ()=>{
   moreMusicBtn.click();
 });
 
-
-
-
-
 editBtn.addEventListener('click', async () => {
     const modal = document.getElementById("editModal");
     modal.style.display = "block";
@@ -200,4 +190,55 @@ span.onclick = function() {
 
 
 
+/*
+mainAudio.addEventListener("timeupdate", (e)=>{
+    console.log("timeupdate");
+    const currentTime = e.target.currentTime; //getting playing song currentTime
+    const duration = e.target.duration; //getting playing song total duration
+    let progressWidth = (currentTime / duration) * 100;
+    progressBar.style.width = `${progressWidth}%`;
+  
+    let musicCurrentTime = wrapper.querySelector(".current-time"),
+    musicDuartion = wrapper.querySelector(".max-duration");
+    mainAudio.addEventListener("loadeddata", ()=>{
+      // update song total duration
+      let mainAdDuration = mainAudio.duration;
+      let totalMin = Math.floor(mainAdDuration / 60);
+      let totalSec = Math.floor(mainAdDuration % 60);
+      if(totalSec < 10){ //if sec is less than 10 then add 0 before it
+        totalSec = `0${totalSec}`;
+      }
+      musicDuartion.innerText = `${totalMin}:${totalSec}`;
+    });
+    // update playing song current time
+    let currentMin = Math.floor(currentTime / 60);
+    let currentSec = Math.floor(currentTime % 60);
+    if(currentSec < 10){ //if sec is less than 10 then add 0 before it
+      currentSec = `0${currentSec}`;
+    }
+    musicCurrentTime.innerText = `${currentMin}:${currentSec}`;
+  });
 
+// update playing song currentTime on according to the progress bar width
+progressArea.addEventListener("click", (e)=>{
+    let progressWidth = progressArea.clientWidth; //getting width of progress bar
+    let clickedOffsetX = e.offsetX; //getting offset x value
+    let songDuration = mainAudio.duration; //getting song total duration
+    
+    mainAudio.currentTime = (clickedOffsetX / progressWidth) * songDuration;
+    playMusic(); //calling playMusic function
+    playingSong();
+  });
+
+  // update playing song currentTime on according to the progress bar width
+progressArea.addEventListener("click", (e)=>{
+    let progressWidth = progressArea.clientWidth; //getting width of progress bar
+    let clickedOffsetX = e.offsetX; //getting offset x value
+    let songDuration = mainAudio.duration; //getting song total duration
+    
+    mainAudio.currentTime = (clickedOffsetX / progressWidth) * songDuration;
+    playMusic(); //calling playMusic function
+    playingSong();
+  });
+  */
+  

@@ -92,7 +92,7 @@ export class SongManager {
 
 
             getRequest.onsuccess = ()=> {
-                
+
                 let url = URL.createObjectURL(getRequest.result.file);
                 this.audioId = id;
                 this.audio = new Audio(url);
@@ -103,9 +103,7 @@ export class SongManager {
                 this.img = URL.createObjectURL(new Blob([imagen.data], { type: imagen.format }));
 
                 this.syncInfoSong();
-                
-
-                console.log("Canción obtenida con éxito", getRequest.result.file);
+            
                 this.audioChange = false;
 
                 resolve();
