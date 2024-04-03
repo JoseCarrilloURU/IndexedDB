@@ -154,7 +154,7 @@ window.onload = async function() {
     try {
       await dbPromise;
       console.log("Database opened successfully.");
-      moreMusicBtn.click();
+      //moreMusicBtn.click();
     } catch (error) {
       console.error("Error: ", error);
 };
