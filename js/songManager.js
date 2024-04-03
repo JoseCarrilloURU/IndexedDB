@@ -512,6 +512,10 @@ export class SongManager {
         }
         musicDuartion.innerText = `${totalMin}:${totalSec}`;
         });
+
+        this.audio.addEventListener("ended", ()=>{
+            this.nextSong();
+        })
         
         // update playing song currentTime on according to the progress bar width
         progressArea.addEventListener("click", (e)=>{
