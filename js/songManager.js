@@ -16,7 +16,7 @@ export class SongManager {
         this.setNewLastSongID();
         this.fillSongsWithIds();
     
-        this.img = null;
+
         this.audioId = null;
         this.audio=null;
         this.defaultimg = null;
@@ -66,29 +66,33 @@ export class SongManager {
                 this.audio.currentTime = 0;
                 this.audio.pause();
             }
+            let musicImg = document.querySelector(".wrapper").querySelector(".img-area img");//!acople???????????
+            let musicName = document.querySelector(".wrapper").querySelector(".song-details .name");
+            let musicArtist = document.querySelector(".wrapper").querySelector(".song-details .artist");
+            
+            if (this.songs.length==0) {
+                musicName.innerHTML = 'undefined';
+                musicArtist.innerHTML = 'undefined';
+                musicImg.src = 'images/default1.jpg';
+            }
 
             let transaction = this.db.transaction([this.storeName], "readonly");
             let store = transaction.objectStore(this.storeName);
             let getRequest = store.get(id);
+
+
             getRequest.onsuccess = ()=> {
-    
+
                 let url = URL.createObjectURL(getRequest.result.file);
                 this.audioId = id;
                 this.audio = new Audio(url);
                 let imagen = getRequest.result.img;
-                this.img = URL.createObjectURL(new Blob([imagen.data], { type: imagen.format }));
-                console.log("cambiando ", this.img);
 
-                let musicImg = document.querySelector(".wrapper").querySelector(".img-area img");//!acople???????????
-                let musicName = document.querySelector(".wrapper").querySelector(".song-details .name");
-                let musicArtist = document.querySelector(".wrapper").querySelector(".song-details .artist");
                 musicName.innerHTML = getRequest.result.name;
                 musicArtist.innerHTML = getRequest.result.author;
+                musicImg.src = URL.createObjectURL(new Blob([imagen.data], { type: imagen.format }));
                 
-                console.log("cambiando ", musicImg);
-                if (musicImg) {
-                    musicImg.src = this.img
-                }
+
                 console.log("Canción obtenida con éxito", getRequest.result.file);
                 this.audioChange = false;
 
@@ -97,6 +101,7 @@ export class SongManager {
             getRequest.onerror = function(e) {
                 console.log("Error al obtener la canción", e.target.error);
                 reject(e.target.error);
+
             };
         });
     }
@@ -105,15 +110,22 @@ export class SongManager {
 
         let playPause = document.querySelector(".wrapper").querySelector(".play-pause");
 
-        if(this.audio==null){
-            console.log("cambiando cancion ore", 1);
-            this.audioId=1 //! mientras no haya cancion lista de canciones
+        if(this.audio==null  || this.audioId==Infinity){
+            this.songs.length!=0? 
+            this.audioId=Math.min(...this.songs): 
+            console.log("no hay canciones");
+
+
+
+    
             await this.setSong(this.audioId);
+   
         }
 
         if(this.audioChange){
             await this.setSong(this.audioId);
         }
+
 
         if (this.audio.currentTime > 0 ) {
 
