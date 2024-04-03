@@ -15,6 +15,8 @@ export class SongManager {
         this.idforNewSong = null;
         this.setNewLastSongID();
         this.fillSongsWithIds();
+
+        this.loop = false;
     
 
         this.audioId = null;
@@ -32,7 +34,9 @@ export class SongManager {
         }).catch(error => {
             console.error("Error al cargar la imagen por defecto", error);
         });
-        console.log(this.defaultimg);
+
+
+
 
         console.log("SongManager creado");
     }
@@ -69,9 +73,7 @@ export class SongManager {
 
     setSong(id) {
         return new Promise((resolve, reject) => {
-            console.log("cambiando cancion", this.audio);
             if(this.audio!=null){
-                console.log("parando cancion y cambiando a", id);
                 this.audio.currentTime = 0;
                 this.audio.pause();
             }
@@ -90,7 +92,7 @@ export class SongManager {
 
 
             getRequest.onsuccess = ()=> {
-
+                
                 let url = URL.createObjectURL(getRequest.result.file);
                 this.audioId = id;
                 this.audio = new Audio(url);
@@ -246,7 +248,7 @@ export class SongManager {
             this.audioId = Math.min.apply(null, this.songs);
         }
         this.audioChange = true;
-        this.playSong(this.audioId);
+        this.playSong();
     }
 
     prevSong() {
@@ -262,9 +264,22 @@ export class SongManager {
             this.audioId = Math.max.apply(null, this.songs);
         }
         this.audioChange = true;
-        this.playSong(this.audioId);
+        this.playSong();
     }
 
+    async changeSongById(id) {
+        this.audioId = id;
+        this.audioChange = true;
+
+        console.log("cambiando a cancion", id);
+        console.log("canciones", this.songs);
+        console.log("cancion actual id", this.audioId);
+        console.log("cambio", this.audioChange);
+        let der = await this.getAllSongs();
+        console.log("array",der);
+        this.playSong();
+    }   
+    
     fillSongsWithIds() {
         let transaction = this.db.transaction([this.storeName], 'readonly');
         let store = transaction.objectStore(this.storeName);
@@ -281,7 +296,9 @@ export class SongManager {
                 console.log("Canciones cargadas con éxito", this.songs);
                 if (this.songs.length == 0) {
                     // If there are no songs, click the music list button
-                    document.querySelector('#more-music').click();
+                    document.querySelector('#more-music').click();//!acople???????????
+                }else{
+                    this.setSong(this.songs[0]);
                 }
             }
         };
@@ -447,6 +464,10 @@ export class SongManager {
         musicArtist.innerHTML = this.author;
 
         musicImg.src = this.img;
+    }
+
+    playlistLoop(){
+        this.loop = !this.loop;
     }
 
 

@@ -36,14 +36,6 @@ dbRequest.onupgradeneeded = function() {
     db.createObjectStore("SongStore", {keyPath: "id"});
 };
 
-//tomar valores del submit
-
-// open.onsuccess = ()=> {
-//     let db = open.result;
-//     songManager = new SongManager(db,"SongStore");
-//     console.log("La base de datos ha sido abierta con éxito y pasada a SongManager");
-// };
-
 let dbPromise = new Promise((resolve, reject) => {
     dbRequest.onsuccess = function(event) {
         let db = dbRequest.result;
@@ -56,6 +48,8 @@ let dbPromise = new Promise((resolve, reject) => {
         console.log("Error al abrir la base de datos", e.target.error);
       };
     });
+
+
 
 
 uploadBtn.addEventListener('click', ()=>{
@@ -91,6 +85,7 @@ delBtn.addEventListener('click', ()=> {
 let allMusic=null;
 const ulTag = wrapper.querySelector("ul");
 
+
 moreMusicBtn.addEventListener("click", async ()=>{
     allMusic = await songManager.getAllSongs();
     const ulTag = wrapper.querySelector("ul");
@@ -110,7 +105,7 @@ moreMusicBtn.addEventListener("click", async ()=>{
         </div>
         `;
         ulTag.insertAdjacentHTML("beforeend", liTag); //inserting the li inside ul tag
-        document.getElementById('uploadnew').addEventListener('click', function() {
+        document.getElementById('uploadnew').addEventListener('click', ()=> {
             console.log("uploadButton clicked no songs");
             songManager.uploadSong().then(() => {
                 console.log("Canción subida con éxito");
@@ -123,41 +118,53 @@ moreMusicBtn.addEventListener("click", async ()=>{
         togglefavBtn.style.pointerEvents = 'auto';
         // let create li tags according to array length for list
         for (let i = 0; i < allMusic.length; i++) {
-        //let's pass the song name, artist from the array
-        //let img = allMusic[i].img;
-        let liTag = `<li li-index="${i + 1}">
-                            <div class="row" style="display: flex; justify-content: space-between; align-items: center;">
-                            <div>
-                                <span>${allMusic[i].name}</span>
-                                <p>${allMusic[i].album}</p>
-                            </div>
-                    </li>`;
-        ulTag.insertAdjacentHTML("beforeend", liTag); //inserting the li inside ul tag    
+            let liTag = document.createElement("li");
+            liTag.setAttribute("li-index", allMusic[i].id);
 
+            let divTagOuter = document.createElement("div");
+            divTagOuter.style.display = "flex";
+            divTagOuter.style.justifyContent = "space-between";
+            divTagOuter.style.alignItems = "center";
+
+            let divTagInner = document.createElement("div");
+
+            let spanTag = document.createElement("span");
+            spanTag.textContent = allMusic[i].name;
+
+            let pTag = document.createElement("p");
+            pTag.textContent = allMusic[i].album;
+
+            divTagInner.appendChild(spanTag);
+            divTagInner.appendChild(pTag);
+            divTagOuter.appendChild(divTagInner);
+            liTag.appendChild(divTagOuter);
+
+            liTag.addEventListener('click', () => {
+                songManager.setSong(allMusic[i].id);
+            });
+
+            ulTag.appendChild(liTag);
         }
 
     }
+    
     musicList.classList.toggle("show");
+    let liTags = ulTag.querySelectorAll('li');
+    liTags.forEach((liTag) => {
+        liTag.addEventListener('click', async () => {
+            let id = liTag.getAttribute("li-index");
+            songManager.changeSongById(id)
+            moreMusicBtn.click();
+        });
+    });
 });
 
 closemoreMusic.addEventListener("click", ()=>{
   moreMusicBtn.click();
 });
 
-// window.onload = async function() {
-//     await ();
-//     console.log("onload")
-//     moreMusicBtn.click();
-//   };
 
-window.onload = async function() {
-    try {
-      await dbPromise;
-      console.log("Database opened successfully.");
-      //moreMusicBtn.click();
-    } catch (error) {
-      console.error("Error: ", error);
-};
+
 
 
 editBtn.addEventListener('click', async () => {
@@ -165,7 +172,6 @@ editBtn.addEventListener('click', async () => {
     modal.style.display = "block";
 
     const song = await songManager.getSong();
-    console.log('dddd',song);
 
     document.getElementById("author").value = song.author;
     document.getElementById("name").value = song.name;
@@ -191,4 +197,7 @@ span.onclick = function() {
 
 
 }
-  };
+
+
+
+
