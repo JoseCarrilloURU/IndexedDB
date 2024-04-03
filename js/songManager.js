@@ -21,6 +21,7 @@ export class SongManager {
 
         this.audioId = null;
         this.audio=new Audio();
+        this.barra();
 
         this.defaultImgPath = 'images/default4.jpg';
         this.defaultImg = null;
@@ -43,7 +44,6 @@ export class SongManager {
         
         
         console.log("SongManager creado");
-        this.barra();
 
     }
 
@@ -102,6 +102,8 @@ export class SongManager {
                 let url = URL.createObjectURL(getRequest.result.file);
                 this.audioId = id;
                 this.audio.src = url;
+                console.log("cambio de cancion", this.audioId);
+
                 let imagen = getRequest.result.img;
                 this.name = getRequest.result.name;
                 this.author = getRequest.result.author;
@@ -292,7 +294,7 @@ export class SongManager {
 
         this.songs = []; // Vacía la lista de canciones antes de llenarla
 
-        request.onsuccess = (e) => {
+        request.onsuccess = async (e) => {
             let cursor = e.target.result;
             if (cursor) {
                 this.songs.push(cursor.value.id); // Agrega el id al array de canciones
@@ -304,6 +306,7 @@ export class SongManager {
                     document.querySelector('#more-music').click();                                                //
                 }else{
                     this.setSong(this.songs[0]);
+                    
                 }
             }
         };
@@ -476,28 +479,19 @@ export class SongManager {
     }
 
     barra(){
+        
         const wrapper = document.querySelector(".wrapper"),
         progressArea = wrapper.querySelector(".progress-area"),
         progressBar = progressArea.querySelector(".progress-bar");
         this.audio.addEventListener("timeupdate", (e)=>{
-            console.log("timeupdate");
             const currentTime = e.target.currentTime; //getting playing song currentTime
             const duration = e.target.duration; //getting playing song total duration
             let progressWidth = (currentTime / duration) * 100;
             progressBar.style.width = `${progressWidth}%`;
           
-            let musicCurrentTime = wrapper.querySelector(".current-time"),
-            musicDuartion = wrapper.querySelector(".max-duration");
-            this.audio.addEventListener("loadeddata", ()=>{
-              // update song total duration
-              let mainAdDuration = this.audio.duration;
-              let totalMin = Math.floor(mainAdDuration / 60);
-              let totalSec = Math.floor(mainAdDuration % 60);
-              if(totalSec < 10){ //if sec is less than 10 then add 0 before it
-                totalSec = `0${totalSec}`;
-              }
-              musicDuartion.innerText = `${totalMin}:${totalSec}`;
-            });
+            let musicCurrentTime = wrapper.querySelector(".current-time");
+
+
             // update playing song current time
             let currentMin = Math.floor(currentTime / 60);
             let currentSec = Math.floor(currentTime % 60);
@@ -505,7 +499,19 @@ export class SongManager {
               currentSec = `0${currentSec}`;
             }
             musicCurrentTime.innerText = `${currentMin}:${currentSec}`;
-          });
+        });
+
+        this.audio.addEventListener("loadeddata", ()=>{
+        const musicDuartion = wrapper.querySelector(".max-duration");
+        // update song total duration
+        let mainAdDuration = this.audio.duration;
+        let totalMin = Math.floor(mainAdDuration / 60);
+        let totalSec = Math.floor(mainAdDuration % 60);
+        if(totalSec < 10){ //if sec is less than 10 then add 0 before it
+            totalSec = `0${totalSec}`;
+        }
+        musicDuartion.innerText = `${totalMin}:${totalSec}`;
+        });
         
         // update playing song currentTime on according to the progress bar width
         progressArea.addEventListener("click", (e)=>{
