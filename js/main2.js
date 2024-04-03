@@ -143,3 +143,52 @@ moreMusicBtn.addEventListener("click", async ()=>{
 closemoreMusic.addEventListener("click", ()=>{
   moreMusicBtn.click();
 });
+
+// window.onload = async function() {
+//     await ();
+//     console.log("onload")
+//     moreMusicBtn.click();
+//   };
+
+window.onload = async function() {
+    try {
+      await dbPromise;
+      console.log("Database opened successfully.");
+      moreMusicBtn.click();
+    } catch (error) {
+      console.error("Error: ", error);
+};
+
+
+editBtn.addEventListener('click', async () => {
+    const modal = document.getElementById("editModal");
+    modal.style.display = "block";
+
+    const song = await songManager.getSong();
+    console.log('dddd',song);
+
+    document.getElementById("author").value = song.author;
+    document.getElementById("name").value = song.name;
+    document.getElementById("album").value = song.album;
+});
+
+const form = document.getElementById("editForm");
+form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    let author = document.getElementById("author").value;
+    let name = document.getElementById("name").value;
+    let album = document.getElementById("album").value;
+    songManager.edit(name, author, album);
+
+    const modal = document.getElementById("editModal");
+    modal.style.display = "none";
+});
+
+const span = document.getElementsByClassName("close")[0];
+span.onclick = function() {
+    const modal = document.getElementById("editModal");
+    modal.style.display = "none";
+
+
+}
+  };

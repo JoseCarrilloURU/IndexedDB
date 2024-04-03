@@ -20,6 +20,12 @@ export class SongManager {
         this.audioId = null;
         this.audio=null;
         this.defaultimg = null;
+
+        this.author = null;
+        this.album = null;
+        this.name = null;
+        this.img = null;
+        
         this.imgDefault("images/default1.jpg").then(imageObject => {
             this.defaultimg = imageObject;
             console.log("Imagen por defecto cargada", imageObject);
@@ -69,14 +75,13 @@ export class SongManager {
                 this.audio.currentTime = 0;
                 this.audio.pause();
             }
-            let musicImg = document.querySelector(".wrapper").querySelector(".img-area img");//!acople???????????
-            let musicName = document.querySelector(".wrapper").querySelector(".song-details .name");
-            let musicArtist = document.querySelector(".wrapper").querySelector(".song-details .artist");
+
             
             if (this.songs.length==0) {
-                musicName.innerHTML = 'undefined';
-                musicArtist.innerHTML = 'undefined';
-                musicImg.src = 'images/default1.jpg';
+                this.name = 'undefined';
+                this.author = 'undefined';
+                this.img = 'images/default1.jpg';
+                this.syncInfoSong();
             }
 
             let transaction = this.db.transaction([this.storeName], "readonly");
@@ -90,10 +95,12 @@ export class SongManager {
                 this.audioId = id;
                 this.audio = new Audio(url);
                 let imagen = getRequest.result.img;
+                this.name = getRequest.result.name;
+                this.author = getRequest.result.author;
+                this.album = getRequest.result.album;
+                this.img = URL.createObjectURL(new Blob([imagen.data], { type: imagen.format }));
 
-                musicName.innerHTML = getRequest.result.name;
-                musicArtist.innerHTML = getRequest.result.author;
-                musicImg.src = URL.createObjectURL(new Blob([imagen.data], { type: imagen.format }));
+                this.syncInfoSong();
                 
 
                 console.log("Canción obtenida con éxito", getRequest.result.file);
@@ -327,8 +334,6 @@ export class SongManager {
             const self = this; // Define 'self' to refer to the SongManager instance
             fileInput.onchange = async function() {
                 const file = this.files[0];
-
-
                 
                 try {
                     let transaction = self.db.transaction([self.storeName], "readwrite");
