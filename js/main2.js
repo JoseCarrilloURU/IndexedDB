@@ -102,7 +102,7 @@ moreMusicBtn.addEventListener("click", async ()=>{
         togglefavBtn.style.pointerEvents = 'none';
         console.log("No hay canciones");
         let liTag =  `<div id = "uploadnew"> 
-            <i class="material-icons" title="Upload Songs">audio_file</i>
+            <i class="material-icons" title="Upload Song">audio_file</i>
         </div>
         <div id = "uploadnew-text">
         <p class = "title">ADD YOUR FIRST SONG!</p>
