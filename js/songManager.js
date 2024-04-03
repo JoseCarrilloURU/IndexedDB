@@ -390,5 +390,66 @@ export class SongManager {
                 });
         });
     }
+
+    edit(name,author, album ) {
+        const transaction = this.db.transaction([this.storeName], "readwrite");
+        const store = transaction.objectStore(this.storeName);
+        const getRequest = store.get(this.audioId);
+
+        getRequest.onsuccess = (event) =>{
+            const song = event.target.result;
+            song.author = author;
+            song.album = album;
+            song.name = name;
+            const putRequest = store.put(song);
+
+            putRequest.onsuccess = (event) =>{
+                console.log("Canción editada con éxito");
+                this.author = author;
+                this.album = album;
+                this.name = name;
+                this.syncInfoSong();
+            };
+
+            putRequest.onerror = function(event) {
+                console.log("Error al editar la canción", event.target.error);
+            };
+        };
+
+        getRequest.onerror = function(event) {
+            console.log("Error al obtener la canción", event.target.error);
+        };
+    }
+
+
+    getSong() {
+        return new Promise((resolve, reject) => {
+            let transaction = this.db.transaction([this.storeName], "readonly");
+            let store = transaction.objectStore(this.storeName);
+            let getRequest = store.get(this.audioId);
+
+            getRequest.onsuccess = () => {
+                console.log("Canción obtenida con éxito", getRequest.result);
+                resolve(getRequest.result);
+            };
+            getRequest.onerror = function(e) {
+                console.log("Error al obtener la canción", e.target.error);
+                reject(e.target.error);
+            };
+        });
+    }
+
+    syncInfoSong() {
+        let musicImg = document.querySelector(".wrapper").querySelector(".img-area img");//!acople???????????
+        let musicName = document.querySelector(".wrapper").querySelector(".song-details .name");
+        let musicArtist = document.querySelector(".wrapper").querySelector(".song-details .artist");
+        musicName.innerHTML = this.name;
+        musicArtist.innerHTML = this.author;
+
+        musicImg.src = this.img;
+    }
+
+
+
 }
 
