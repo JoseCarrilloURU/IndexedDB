@@ -10,6 +10,8 @@
   margin: 0;
 }
 :root{
+  --lightblack: #2a2a2a;
+  --black: #000000;
   --blue: #bde8ff;
   --navy: #31459d;
   --yellow: #f8ff22;
@@ -25,7 +27,7 @@ body{
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  background: linear-gradient(var(--blue) 0%, var(--navy) 100%);
+  background: linear-gradient(var(--lightblack) 0%, var(--black) 100%);
 }
 .wrapper{
   width: 380px;
@@ -166,7 +168,7 @@ body{
 .controls i{
   font-size: 28px;
   user-select: none;
-  background: linear-gradient(var(--blue) 0%, var(--navy) 100%);
+  background: linear-gradient(var(--lightblack) 0%, var(--black) 100%);
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -198,7 +200,7 @@ body{
   height: 43px;
   width: 43px;
   border-radius: inherit;
-  background: linear-gradient(var(--blue) 0%, var(--navy) 100%);
+  background: linear-gradient(var(--lightblack) 0%, var(--black) 100%);
 }
 .play-pause i{
   height: 43px;

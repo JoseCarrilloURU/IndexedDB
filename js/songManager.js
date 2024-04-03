@@ -28,7 +28,7 @@ export class SongManager {
         this.name = null;
         this.img = null;
         
-        this.imgDefault("images/default1.jpg").then(imageObject => {
+        this.imgDefault("images/default2.jpg").then(imageObject => {
             this.defaultimg = imageObject;
             console.log("Imagen por defecto cargada", imageObject);
         }).catch(error => {
@@ -82,7 +82,7 @@ export class SongManager {
             if (this.songs.length==0) {
                 this.name = 'undefined';
                 this.author = 'undefined';
-                this.img = 'images/default1.jpg';
+                this.img = 'images/default2.jpg';
                 this.syncInfoSong();
             }
 
@@ -294,7 +294,7 @@ export class SongManager {
                 console.log("Canciones cargadas con éxito", this.songs);
                 if (this.songs.length == 0) {
                     // If there are no songs, click the music list button
-                    document.querySelector('#more-music').click();//!acople???????????
+                    document.querySelector('#more-music').click();                                                //
                 }else{
                     this.setSong(this.songs[0]);
                 }
@@ -455,7 +455,7 @@ export class SongManager {
     }
 
     syncInfoSong() {
-        let musicImg = document.querySelector(".wrapper").querySelector(".img-area img");//!acople???????????
+        let musicImg = document.querySelector(".wrapper").querySelector(".img-area img");//
         let musicName = document.querySelector(".wrapper").querySelector(".song-details .name");
         let musicArtist = document.querySelector(".wrapper").querySelector(".song-details .artist");
         musicName.innerHTML = this.name;

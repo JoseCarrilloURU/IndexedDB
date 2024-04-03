@@ -70,10 +70,10 @@ nextBtn.addEventListener('click', ()=> {
     songManager.nextSong();
 });
 
-changePic.addEventListener('click', ()=> {
+/* changePic.addEventListener('click', ()=> {
     console.log("changePic clicked");
     songManager.changePic();
-});
+}); */
 
 delBtn.addEventListener('click', ()=> {
     console.log("deleteButton clicked");
