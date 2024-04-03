@@ -22,7 +22,7 @@ export class SongManager {
         this.audioId = null;
         this.audio=null;
 
-        this.defaultImgPath = 'images/default2.jpg';
+        this.defaultImgPath = 'images/default4.jpg';
         this.defaultImg = null;
 
         this.author = null;
