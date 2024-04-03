@@ -40,16 +40,19 @@ export class SongManager {
         if(!name || name==""){
             let fileName = file.name.split(".")[0];
             name = fileName;
-            console.log("nombre de cancion vacio, se ha cambiado a", name);
+            console.log("Nombre de canción vacío, se ha cambiado a ", name);
         }
         if(!img || img==""){
             img = this.defaultimg;
-            console.log("img de cancion vacio, se ha cambiado a", this.defaultimg);
+            console.log("Imagen de canción vacía, se ha cambiado a ", this.defaultimg);
         }
         let request = store.add({id: this.idforNewSong, name: name, author: author, album: album, file: file,img: img, isFavorite: false});
         request.onsuccess = (e)=> {
             this.songs.push(this.idforNewSong++)
             console.log("Canción añadida con éxito");
+            if (this.songs.length === 1) {
+                this.playSong();
+            }
         };
         request.onerror = function(e) {
             console.log("Error al añadir la canción", e.target.error);
@@ -114,9 +117,6 @@ export class SongManager {
             this.songs.length!=0? 
             this.audioId=Math.min(...this.songs): 
             console.log("no hay canciones");
-
-
-
     
             await this.setSong(this.audioId);
    
@@ -169,6 +169,10 @@ export class SongManager {
             console.log("El objeto ha sido borrado con éxito", id);
             console.log(this.songs); 
             this.nextSong();
+
+            if (this.songs.length === 0) {
+                document.querySelector('#more-music').click();
+            }
         };
     
         request.onerror = function(e) {
@@ -267,8 +271,11 @@ export class SongManager {
                 this.songs.push(cursor.value.id); // Agrega el id al array de canciones
                 cursor.continue(); // Continúa al siguiente registro
             } else {
-                
                 console.log("Canciones cargadas con éxito", this.songs);
+                if (this.songs.length == 0) {
+                    // If there are no songs, click the music list button
+                    document.querySelector('#more-music').click();
+                }
             }
         };
 
@@ -299,6 +306,7 @@ export class SongManager {
                     if(self.audioId==null){
                         self.nextSong();
                     }
+                    
                     resolve(); // Resolve the promise when addSong has finished
                 } catch (error) {
                     console.error(error);

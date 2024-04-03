@@ -97,6 +97,9 @@ moreMusicBtn.addEventListener("click", async ()=>{
     ulTag.innerHTML = ''; // Vacía el contenido de ulTag
 
     if(allMusic.length==0){
+        closemoreMusic.style.visibility = 'hidden';
+        closemoreMusic.style.pointerEvents = 'none';
+        togglefavBtn.style.pointerEvents = 'none';
         console.log("No hay canciones");
         let liTag =  `<div id = "uploadnew"> 
             <i class="material-icons" title="Upload Songs">audio_file</i>
@@ -114,7 +117,10 @@ moreMusicBtn.addEventListener("click", async ()=>{
                 moreMusicBtn.click();
             });
         });
-    }else{  
+    }else{
+        closemoreMusic.style.visibility = 'visible';
+        closemoreMusic.style.pointerEvents = 'auto';  
+        togglefavBtn.style.pointerEvents = 'auto';
         // let create li tags according to array length for list
         for (let i = 0; i < allMusic.length; i++) {
         //let's pass the song name, artist from the array
@@ -137,19 +143,3 @@ moreMusicBtn.addEventListener("click", async ()=>{
 closemoreMusic.addEventListener("click", ()=>{
   moreMusicBtn.click();
 });
-
-// window.onload = async function() {
-//     await ();
-//     console.log("onload")
-//     moreMusicBtn.click();
-//   };
-
-window.onload = async function() {
-    try {
-      await dbPromise;
-      console.log("Database opened successfully.");
-      moreMusicBtn.click();
-    } catch (error) {
-      console.error("Error: ", error);
-    }
-  };
