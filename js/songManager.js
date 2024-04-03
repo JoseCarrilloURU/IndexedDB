@@ -21,15 +21,17 @@ export class SongManager {
 
         this.audioId = null;
         this.audio=null;
-        this.defaultimg = null;
+
+        this.defaultImgPath = 'images/default2.jpg';
+        this.defaultImg = null;
 
         this.author = null;
         this.album = null;
         this.name = null;
         this.img = null;
         
-        this.imgDefault("images/default2.jpg").then(imageObject => {
-            this.defaultimg = imageObject;
+        this.imgDefault(this.defaultImgPath).then(imageObject => {
+            this.defaultImg = imageObject;
             console.log("Imagen por defecto cargada", imageObject);
         }).catch(error => {
             console.error("Error al cargar la imagen por defecto", error);
@@ -53,8 +55,8 @@ export class SongManager {
             console.log("Nombre de canción vacío, se ha cambiado a ", name);
         }
         if(!img || img==""){
-            img = this.defaultimg;
-            console.log("Imagen de canción vacía, se ha cambiado a ", this.defaultimg);
+            img = this.defaultImg;
+            console.log("Imagen de canción vacía, se ha cambiado a ", this.defaultImg);
         }
         let request = store.add({id: this.idforNewSong, name: name, author: author, album: album, file: file,img: img, isFavorite: false});
         request.onsuccess = (e)=> {
@@ -82,7 +84,7 @@ export class SongManager {
             if (this.songs.length==0) {
                 this.name = 'undefined';
                 this.author = 'undefined';
-                this.img = 'images/default2.jpg';
+                this.img = this.defaultImgPath;
                 this.syncInfoSong();
             }
 
