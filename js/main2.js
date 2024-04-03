@@ -98,9 +98,13 @@ moreMusicBtn.addEventListener("click", async ()=>{
 
     if(allMusic.length==0){
         console.log("No hay canciones");
-        let liTag =  `
-        <i id="uploadnew" class="material-icons" title="Upload Songs">audio_file</i>
-        <h1 style="display: flex; justify-content: center; align-items: center; ">SUBIR CANCIÓN</h1>
+        let liTag =  `<div id = "uploadnew"> 
+            <i class="material-icons" title="Upload Songs">audio_file</i>
+        </div>
+        <div id = "uploadnew-text">
+        <p class = "title">ADD YOUR FIRST SONG!</p>
+        <p class = "subtitle">No songs have been added. Click on the button to add the first one.</p>
+        </div>
         `;
         ulTag.insertAdjacentHTML("beforeend", liTag); //inserting the li inside ul tag
         document.getElementById('uploadnew').addEventListener('click', function() {
