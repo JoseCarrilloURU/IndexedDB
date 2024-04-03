@@ -144,20 +144,7 @@ closemoreMusic.addEventListener("click", ()=>{
   moreMusicBtn.click();
 });
 
-// window.onload = async function() {
-//     await ();
-//     console.log("onload")
-//     moreMusicBtn.click();
-//   };
 
-window.onload = async function() {
-    try {
-      await dbPromise;
-      console.log("Database opened successfully.");
-      moreMusicBtn.click();
-    } catch (error) {
-      console.error("Error: ", error);
-};
 
 
 editBtn.addEventListener('click', async () => {
@@ -191,4 +178,3 @@ span.onclick = function() {
 
 
 }
-  };
