@@ -20,7 +20,7 @@ export class SongManager {
     
 
         this.audioId = null;
-        this.audio=null;
+        this.audio=new Audio();
 
         this.defaultImgPath = 'images/default4.jpg';
         this.defaultImg = null;
@@ -29,6 +29,8 @@ export class SongManager {
         this.album = null;
         this.name = null;
         this.img = null;
+
+        
         
         this.imgDefault(this.defaultImgPath).then(imageObject => {
             this.defaultImg = imageObject;
@@ -36,11 +38,13 @@ export class SongManager {
         }).catch(error => {
             console.error("Error al cargar la imagen por defecto", error);
         });
-
-
-
-
+        
+        
+        
+        
         console.log("SongManager creado");
+        this.barra();
+
     }
 
     //añade cancion id 0
@@ -97,12 +101,13 @@ export class SongManager {
 
                 let url = URL.createObjectURL(getRequest.result.file);
                 this.audioId = id;
-                this.audio = new Audio(url);
+                this.audio.src = url;
                 let imagen = getRequest.result.img;
                 this.name = getRequest.result.name;
                 this.author = getRequest.result.author;
                 this.album = getRequest.result.album;
                 this.img = URL.createObjectURL(new Blob([imagen.data], { type: imagen.format }));
+
 
                 this.syncInfoSong();
             
@@ -468,6 +473,61 @@ export class SongManager {
 
     playlistLoop(){
         this.loop = !this.loop;
+    }
+
+    barra(){
+        const wrapper = document.querySelector(".wrapper"),
+        progressArea = wrapper.querySelector(".progress-area"),
+        progressBar = progressArea.querySelector(".progress-bar");
+        this.audio.addEventListener("timeupdate", (e)=>{
+            console.log("timeupdate");
+            const currentTime = e.target.currentTime; //getting playing song currentTime
+            const duration = e.target.duration; //getting playing song total duration
+            let progressWidth = (currentTime / duration) * 100;
+            progressBar.style.width = `${progressWidth}%`;
+          
+            let musicCurrentTime = wrapper.querySelector(".current-time"),
+            musicDuartion = wrapper.querySelector(".max-duration");
+            this.audio.addEventListener("loadeddata", ()=>{
+              // update song total duration
+              let mainAdDuration = this.audio.duration;
+              let totalMin = Math.floor(mainAdDuration / 60);
+              let totalSec = Math.floor(mainAdDuration % 60);
+              if(totalSec < 10){ //if sec is less than 10 then add 0 before it
+                totalSec = `0${totalSec}`;
+              }
+              musicDuartion.innerText = `${totalMin}:${totalSec}`;
+            });
+            // update playing song current time
+            let currentMin = Math.floor(currentTime / 60);
+            let currentSec = Math.floor(currentTime % 60);
+            if(currentSec < 10){ //if sec is less than 10 then add 0 before it
+              currentSec = `0${currentSec}`;
+            }
+            musicCurrentTime.innerText = `${currentMin}:${currentSec}`;
+          });
+        
+        // update playing song currentTime on according to the progress bar width
+        progressArea.addEventListener("click", (e)=>{
+            let progressWidth = progressArea.clientWidth; //getting width of progress bar
+            let clickedOffsetX = e.offsetX; //getting offset x value
+            let songDuration = this.audio.duration; //getting song total duration
+            
+            this.audio.currentTime = (clickedOffsetX / progressWidth) * songDuration;
+
+          });
+        
+          // update playing song currentTime on according to the progress bar width
+        progressArea.addEventListener("click", (e)=>{
+            let progressWidth = progressArea.clientWidth; //getting width of progress bar
+            let clickedOffsetX = e.offsetX; //getting offset x value
+            let songDuration = this.audio.duration; //getting song total duration
+
+            this.audio.currentTime = (clickedOffsetX / progressWidth) * songDuration;
+
+
+          });
+
     }
 
 
