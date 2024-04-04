@@ -154,7 +154,7 @@ closemoreMusic.addEventListener("click", ()=>{
 
 editBtn.addEventListener('click', async () => {
     const modal = document.getElementById("editModal");
-    modal.style.display = "block";
+    modal.classList.add('show');
 
     const song = await songManager.getSong();
 
@@ -172,15 +172,13 @@ form.addEventListener('submit', (event) => {
     songManager.edit(name, author, album);
 
     const modal = document.getElementById("editModal");
-    modal.style.display = "none";
+    modal.classList.remove('show');
 });
 
 const span = document.getElementsByClassName("close")[0];
 span.onclick = function() {
     const modal = document.getElementById("editModal");
-    modal.style.display = "none";
-
-
+    modal.classList.remove('show');
 }
 
 
