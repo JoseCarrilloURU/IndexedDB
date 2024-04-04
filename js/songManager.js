@@ -29,6 +29,7 @@ export class SongManager {
         this.album = null;
         this.name = null;
         this.img = null;
+        this.isFavorite = false;
 
         this.selector = false;
 
@@ -80,7 +81,6 @@ export class SongManager {
                 this.audio.currentTime = 0;
                 this.audio.pause();
             }
-
             
             if (this.songs.length==0) {
                 this.name = 'undefined';
@@ -88,8 +88,6 @@ export class SongManager {
                 this.img = this.defaultImgPath;
                 this.syncInfoSong();
             }
-
-
 
             if (this.shuffle && !this.selector) {
                 console.log(!this.selector)
@@ -118,6 +116,7 @@ export class SongManager {
                 this.name = getRequest.result.name;
                 this.author = getRequest.result.author;
                 this.album = getRequest.result.album;
+                this.isFavorite = getRequest.result.isFavorite;
                 this.img = URL.createObjectURL(new Blob([imagen.data], { type: imagen.format }));
 
 
@@ -137,8 +136,35 @@ export class SongManager {
 
     favoriteSong(){
         let favBtn = document.querySelector(".wrapper").querySelector("#favorite");
-            const isFav = favBtn.innerText === "star";
-            isFav ? favBtn.innerText = "star_border" : favBtn.innerText = "star";
+        this.isFavorite = !this.isFavorite; // Toggle isFavorite variable
+
+            // Update the isFavorite property of the current song in the database
+            let transaction = this.db.transaction([this.storeName], "readwrite");
+            let store = transaction.objectStore(this.storeName);
+            let request = store.get(this.audioId);
+            request.onsuccess = () => {
+                let song = request.result;
+                song.isFavorite = this.isFavorite;
+                store.put(song);
+            };
+            favBtn.innerText = this.isFavorite ? "star" : "star_border";
+    }
+
+    getFavoriteSongs() {
+        return new Promise((resolve, reject) => {
+            let transaction = this.db.transaction([this.storeName], "readonly");
+            let store = transaction.objectStore(this.storeName);
+            let request = store.getAll();
+            request.onsuccess = () => {
+                let songs = request.result;
+                let favoriteSongs = songs.filter(song => song.isFavorite);
+                resolve(favoriteSongs);
+            };
+            request.onerror = (e) => {
+                console.log("Error getting all songs", e.target.error);
+                reject(e.target.error);
+            };
+        });
     }
 
     async playSong(){
@@ -603,6 +629,6 @@ export class SongManager {
         this.selector = true;
         await this.setSong(this.audioId);
         this.playSong();
-    }
+        };
 }
 

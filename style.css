@@ -116,7 +116,7 @@ body{
 }
 
 .top-bar, .progress-area .song-timer, 
-.controls, .music-list .header, .music-list ul li{
+.controls, .music-list .header, .favorites-list .fav-header, .music-list ul li, .favorites-list ul li{
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -356,7 +356,7 @@ body{
 .header .row span{
   margin-left: 8px;
 }
-.header #close{
+.header #close, .fav-header #close-fav{
   font-size: 24px;
   user-select: none;
   color: var(--lightblack);
@@ -408,6 +408,28 @@ body{
 }
 .music-list ul li .row p{
   opacity: 0.9;
+}
+
+.fav-header .fav-row{
+  user-select: none;
+  display: flex;
+  align-items: center;
+  font-size: 20px;
+  color: var(--lightblack);
+  margin-bottom: 6px;
+}
+.fav-header .fav-row i{
+  font-size: 30px;
+  user-select: none;
+  cursor: pointer;
+  background: linear-gradient(var(--lightblack) 0%, var(--black) 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-right: 8px;
+}
+.fav-header .fav-row span{
+  margin-left: 8px;
 }
 
 .favorites-list{
