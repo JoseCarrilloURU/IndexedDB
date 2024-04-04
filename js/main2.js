@@ -83,14 +83,19 @@ toggleunfavBtn.addEventListener('click', async ()=> {
 togglefavBtn.addEventListener('click', async ()=>{
     moreMusicBtn.click();
     //songManager.favoriteSong();
+    console.log("togglefavBtn clicked");
 
     let allMusic = await songManager.getAllSongs();
+    console.log("allMusic: ", allMusic);
+
     //let favoriteMusic = allMusic.filter(song => song.isFavorite);
     const ulTag = wrapper.querySelector("ul");
     ulTag.innerHTML = ''; // Vacía el contenido de ulTag
     
     // let create li tags according to array length for list
     for (let i = 0; i < allMusic.length; i++) {
+        console.log("entro a for de togglefavBtn");
+
     //for (let i = 0; i < favoriteMusic.length; i++) {
         let liTag = document.createElement("li");
         liTag.setAttribute("li-index", allMusic[i].id);
@@ -142,6 +147,94 @@ togglefavBtn.addEventListener('click', async ()=>{
 
     favoriteList.classList.toggle("show");
 });
+
+
+moreMusicBtn.addEventListener("click", async ()=>{
+    let allMusic = await songManager.getAllSongs();
+    const ulTag = wrapper.querySelector("ul");
+    
+    ulTag.innerHTML = ''; // Vacía el contenido de ulTag
+
+    if(allMusic.length==0){
+        closemoreMusic.style.visibility = 'hidden';
+        closemoreMusic.style.pointerEvents = 'none';
+        togglefavBtn.style.pointerEvents = 'none';
+        console.log("No hay canciones");
+        let liTag =  `<div id = "uploadnew"> 
+            <i class="material-icons" title="Upload Song">audio_file</i>
+        </div>
+        <div id = "uploadnew-text">
+        <p class = "title">ADD YOUR FIRST SONG!</p>
+        <p class = "subtitle">No songs have been added. Click on the button to add the first one.</p>
+        </div>
+        `;
+        ulTag.insertAdjacentHTML("beforeend", liTag); //inserting the li inside ul tag
+        document.getElementById('uploadnew').addEventListener('click', ()=> {
+            console.log("uploadButton clicked no songs");
+            songManager.uploadSong().then(() => {
+                console.log("Canción subida con éxito");
+                moreMusicBtn.click();
+            });
+        });
+    }else{
+        closemoreMusic.style.visibility = 'visible';
+        closemoreMusic.style.pointerEvents = 'auto';  
+        togglefavBtn.style.pointerEvents = 'auto';
+        
+        // let create li tags according to array length for list
+        for (let i = 0; i < allMusic.length; i++) {
+            let liTag = document.createElement("li");
+            liTag.setAttribute("li-index", allMusic[i].id);
+
+            let divTagTime = document.createElement("div");
+            divTagTime.setAttribute("class", "timeStamp");
+
+
+            let divTagInner = document.createElement("div");
+            divTagInner.setAttribute("class", "music-info");
+
+            let h4tag = document.createElement("h4");
+            h4tag.textContent = allMusic[i].name;
+
+            let spanTag = document.createElement("span");
+            spanTag.textContent = allMusic[i].artist ? "By: " + allMusic[i].artist : "By: undefined";
+            spanTag.setAttribute("class", "listartist");
+
+            let pTag = document.createElement("p");
+            pTag.textContent = allMusic[i].album ? "Album: " + allMusic[i].album : "Album: undefined";
+            pTag.style.fontSize = "0.9em"; 
+            pTag.setAttribute("class", "listalbum");
+
+            let spanTime = document.createElement("h4");
+
+            
+            spanTime.textContent = allMusic[i].duration;
+
+            divTagInner.appendChild(h4tag);
+            divTagInner.appendChild(spanTag);
+            divTagInner.appendChild(pTag);
+            divTagTime.appendChild(spanTime);
+
+            liTag.appendChild(divTagInner);
+            liTag.appendChild(divTagTime);
+
+
+            liTag.addEventListener('click', () => {
+
+                songManager.setSongSelector(allMusic[i].id)
+                console.log("Canción cambiada changesongbyid");
+                moreMusicBtn.click();
+            });
+
+            ulTag.appendChild(liTag);
+        }
+    }
+    
+    musicList.classList.toggle("show");
+
+});
+
+/*
 
 moreMusicBtn.addEventListener("click", async ()=>{
     let allMusic = await songManager.getAllSongs();
@@ -226,6 +319,8 @@ moreMusicBtn.addEventListener("click", async ()=>{
     musicList.classList.toggle("show");
 
 });
+
+*/
 
 closemoreMusic.addEventListener("click", ()=>{
   moreMusicBtn.click();
