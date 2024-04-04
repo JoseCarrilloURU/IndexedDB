@@ -69,6 +69,7 @@ export class SongManager {
             this.songs.push(this.idforNewSong++)
             console.log("Canción añadida con éxito");
             if (this.songs.length === 1) {
+                this.setSong(this.songs[0]);
                 this.playSong();
             }
         };
