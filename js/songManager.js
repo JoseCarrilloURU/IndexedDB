@@ -303,7 +303,7 @@ export class SongManager {
                 console.log("Canciones cargadas con éxito", this.songs);
                 if (this.songs.length == 0) {
                     // If there are no songs, click the music list button
-                    document.querySelector('#more-music').click();                                                //
+                    document.querySelector('#more-music').click();
                 }else{
                     this.setSong(this.songs[0]);
                     
@@ -465,11 +465,13 @@ export class SongManager {
     }
 
     syncInfoSong() {
-        let musicImg = document.querySelector(".wrapper").querySelector(".img-area img");//
+        let musicImg = document.querySelector(".wrapper").querySelector(".img-area img");
         let musicName = document.querySelector(".wrapper").querySelector(".song-details .name");
         let musicArtist = document.querySelector(".wrapper").querySelector(".song-details .artist");
+        let musicAlbum = document.querySelector(".wrapper").querySelector(".song-details .album-name");
         musicName.innerHTML = this.name;
-        musicArtist.innerHTML = this.author;
+        musicArtist.innerHTML = "By: " + this.author;
+        musicAlbum.innerHTML = "Album: " + this.album;
 
         musicImg.src = this.img;
     }
