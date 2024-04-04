@@ -49,7 +49,7 @@ export class SongManager {
     }
 
     //añade cancion id 0
-    addSong(file,name,author,album,img) {
+    addSong(file,name,author,album,img,duration) {
         console.log("añadiendo cancion",this.idforNewSong,'nombre', name,'autor', author,'album', album,'file', file,'img', img);
         let transaction = this.db.transaction([this.storeName], "readwrite");
         let store = transaction.objectStore(this.storeName);
@@ -63,7 +63,7 @@ export class SongManager {
             img = this.defaultImg;
             console.log("Imagen de canción vacía, se ha cambiado a ", this.defaultImg);
         }
-        let request = store.add({id: this.idforNewSong, name: name, author: author, album: album, file: file,img: img, isFavorite: false});
+        let request = store.add({id: this.idforNewSong, name: name, author: author, album: album, file: file,img: img, isFavorite: false,duration: duration});
         request.onsuccess = (e)=> {
             this.songs.push(this.idforNewSong++)
             console.log("Canción añadida con éxito");
@@ -225,7 +225,9 @@ export class SongManager {
                     name: song.name,
                     artist: song.author,
                     album: song.album,
-                    file: song.file
+                    file: song.file,
+                    isFavorite: song.isFavorite,
+                    duration: this.secondsToHms(song.duration),
                 }));
 
                 console.log(arrsongs);
@@ -339,10 +341,11 @@ export class SongManager {
                     let artista = metadata.common.artist;
                     let album = metadata.common.album;
                     let img= null;
+                    let duration = metadata.format.duration;
                     if (metadata.common.picture && metadata.common.picture[0]) {
                         img = metadata.common.picture[0];
                     }
-                    await self.addSong(file,nombre,artista,album, img); // Use 'self' instead of 'this'
+                    await self.addSong(file,nombre,artista,album, img,duration); // Use 'self' instead of 'this'
                     if(self.audioId==null){
                         self.nextSong();
                     }
@@ -578,5 +581,19 @@ export class SongManager {
         await this.setSong(this.audioId);
         this.playSong();
     }
+
+secondsToHms(d) {
+    d = Number(d);
+    let h = Math.floor(d / 3600);
+    let m = Math.floor(d % 3600 / 60);
+    let s = Math.floor(d % 3600 % 60);
+
+    let hourD = h > 0 ? (h < 10 ? '0' + h : h) + ':' : '';
+    let minuteD = (h > 0 && m < 10) ? '0' + m : m;
+    let segD = s < 10 ? '0' + s : s;
+    return hourD + minuteD + ':' + segD; 
+}
+
+
 }
 
