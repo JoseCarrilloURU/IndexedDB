@@ -134,7 +134,9 @@ moreMusicBtn.addEventListener("click", async ()=>{
             liTag.appendChild(divTagOuter);
 
             liTag.addEventListener('click', () => {
-                songManager.setSong(allMusic[i].id);
+
+                songManager.setSongSelector(allMusic[i].id)
+                console.log("Canción cambiada changesongbyid");
             });
 
             ulTag.appendChild(liTag);
@@ -143,14 +145,7 @@ moreMusicBtn.addEventListener("click", async ()=>{
     }
     
     musicList.classList.toggle("show");
-    let liTags = ulTag.querySelectorAll('li');
-    liTags.forEach((liTag) => {
-        liTag.addEventListener('click', async () => {
-            let id = liTag.getAttribute("li-index");
-            songManager.changeSongById(id)
-            moreMusicBtn.click();
-        });
-    });
+
 });
 
 closemoreMusic.addEventListener("click", ()=>{
@@ -189,56 +184,23 @@ span.onclick = function() {
 }
 
 
-
-/*
-mainAudio.addEventListener("timeupdate", (e)=>{
-    console.log("timeupdate");
-    const currentTime = e.target.currentTime; //getting playing song currentTime
-    const duration = e.target.duration; //getting playing song total duration
-    let progressWidth = (currentTime / duration) * 100;
-    progressBar.style.width = `${progressWidth}%`;
-  
-    let musicCurrentTime = wrapper.querySelector(".current-time"),
-    musicDuartion = wrapper.querySelector(".max-duration");
-    mainAudio.addEventListener("loadeddata", ()=>{
-      // update song total duration
-      let mainAdDuration = mainAudio.duration;
-      let totalMin = Math.floor(mainAdDuration / 60);
-      let totalSec = Math.floor(mainAdDuration % 60);
-      if(totalSec < 10){ //if sec is less than 10 then add 0 before it
-        totalSec = `0${totalSec}`;
-      }
-      musicDuartion.innerText = `${totalMin}:${totalSec}`;
-    });
-    // update playing song current time
-    let currentMin = Math.floor(currentTime / 60);
-    let currentSec = Math.floor(currentTime % 60);
-    if(currentSec < 10){ //if sec is less than 10 then add 0 before it
-      currentSec = `0${currentSec}`;
-    }
-    musicCurrentTime.innerText = `${currentMin}:${currentSec}`;
-  });
-
-// update playing song currentTime on according to the progress bar width
-progressArea.addEventListener("click", (e)=>{
-    let progressWidth = progressArea.clientWidth; //getting width of progress bar
-    let clickedOffsetX = e.offsetX; //getting offset x value
-    let songDuration = mainAudio.duration; //getting song total duration
-    
-    mainAudio.currentTime = (clickedOffsetX / progressWidth) * songDuration;
-    playMusic(); //calling playMusic function
-    playingSong();
-  });
-
-  // update playing song currentTime on according to the progress bar width
-progressArea.addEventListener("click", (e)=>{
-    let progressWidth = progressArea.clientWidth; //getting width of progress bar
-    let clickedOffsetX = e.offsetX; //getting offset x value
-    let songDuration = mainAudio.duration; //getting song total duration
-    
-    mainAudio.currentTime = (clickedOffsetX / progressWidth) * songDuration;
-    playMusic(); //calling playMusic function
-    playingSong();
-  });
-  */
+const repeatBtn = wrapper.querySelector("#repeat-plist");
+repeatBtn.addEventListener("click", ()=>{
+  let getText = repeatBtn.innerText; //getting this tag innerText
+  songManager.playlistLoop();
+  switch(getText){
+    case "repeat":
+      repeatBtn.innerText = "repeat_one";
+      repeatBtn.setAttribute("title", "Song Looped");
+      break;
+    case "repeat_one":
+      repeatBtn.innerText = "shuffle";
+      repeatBtn.setAttribute("title", "Playlist Shuffled");
+      break;
+    case "shuffle":
+      repeatBtn.innerText = "repeat";
+      repeatBtn.setAttribute("title", "Playlist Looped");
+      break;
+  }
+});
   

@@ -16,7 +16,7 @@ export class SongManager {
         this.setNewLastSongID();
         this.fillSongsWithIds();
 
-        this.loop = false;
+        this.loopcounter = 0;
     
 
         this.audioId = null;
@@ -30,6 +30,8 @@ export class SongManager {
         this.album = null;
         this.name = null;
         this.img = null;
+
+        this.selector = false;
 
         
         
@@ -92,8 +94,21 @@ export class SongManager {
                 this.syncInfoSong();
             }
 
+
+
+            if (this.shufle && !this.selector) {
+                console.log(!this.selector)
+                let randomSong;
+                do {
+                    let randomIndex = Math.floor(Math.random() * this.songs.length);
+                    randomSong= this.songs[randomIndex];    
+                } while (randomSong == this.audioId);
+                id =randomSong ;
+            }
+
             let transaction = this.db.transaction([this.storeName], "readonly");
             let store = transaction.objectStore(this.storeName);
+            console.log("buscando id", id);
             let getRequest = store.get(id);
 
 
@@ -103,7 +118,7 @@ export class SongManager {
                 this.audioId = id;
                 this.audio.src = url;
                 console.log("cambio de cancion", this.audioId);
-
+                this.selector = false;
                 let imagen = getRequest.result.img;
                 this.name = getRequest.result.name;
                 this.author = getRequest.result.author;
@@ -242,50 +257,42 @@ export class SongManager {
         };
     }
 
-    nextSong() {
+    async nextSong() {
+        let songNumber = this.audioId;
 
-
-        if (!(this.audioId >= Math.max.apply(null, this.songs))){
-            this.audioId++;
-            while (!this.songs.includes(this.audioId)) {
+        if (!(songNumber >= Math.max.apply(null, this.songs))){
+            songNumber++;
+            while (!this.songs.includes(songNumber)) {
                 console.log("entra")
                 this.audioId++;
             }
         }else{
-            this.audioId = Math.min.apply(null, this.songs);
+            songNumber = Math.min.apply(null, this.songs);
         }
         this.audioChange = true;
+        await this.setSong(songNumber);
         this.playSong();
     }
 
-    prevSong() {
+    async prevSong() {
+        let songNumber = this.audioId;
 
-        if (!(this.audioId <= Math.min.apply(null, this.songs))){
-            this.audioId--;
+        if (!(songNumber <= Math.min.apply(null, this.songs))){
+            songNumber--;
 
-            while (!this.songs.includes(this.audioId)) {
+            while (!this.songs.includes(songNumber)) {
                 console.log("entra")
                 this.audioId--;
             }
         }else{
-            this.audioId = Math.max.apply(null, this.songs);
+            songNumber = Math.max.apply(null, this.songs);
         }
         this.audioChange = true;
+        await this.setSong(songNumber);
         this.playSong();
     }
 
-    async changeSongById(id) {
-        this.audioId = id;
-        this.audioChange = true;
-
-        console.log("cambiando a cancion", id);
-        console.log("canciones", this.songs);
-        console.log("cancion actual id", this.audioId);
-        console.log("cambio", this.audioChange);
-        let der = await this.getAllSongs();
-        console.log("array",der);
-        this.playSong();
-    }   
+ 
     
     fillSongsWithIds() {
         let transaction = this.db.transaction([this.storeName], 'readonly');
@@ -475,7 +482,22 @@ export class SongManager {
     }
 
     playlistLoop(){
-        this.loop = !this.loop;
+        this.loopcounter++;
+        switch(this.loopcounter){
+            case 1:
+                this.loop = true;
+                this.audio.loop = true;
+                break;
+            case 2:
+                this.audio.loop = false;
+                this.shufle= true;
+                break;
+            case 3:
+                this.shufle= false;
+                this.loopcounter = 0;
+                break;
+        }
+        console.log("loop",this.loopcounter);
     }
 
     barra(){
@@ -538,6 +560,14 @@ export class SongManager {
 
           });
 
+    }
+
+    async setSongSelector(id){
+        this.audioId = id;
+        this.audioChange = true;
+        this.selector = true;
+        await this.setSong(this.audioId);
+        this.playSong();
     }
 
 
