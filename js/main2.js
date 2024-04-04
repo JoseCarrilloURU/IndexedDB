@@ -12,6 +12,7 @@ moreMusicBtn = wrapper.querySelector("#more-music"),
 favoriteList = wrapper.querySelector(".favorites-list"),
 togglefavBtn = musicList.querySelector("#toggle-fav"),
 toggleunfavBtn = favoriteList.querySelector("#toggle-unfav"),
+closefav = favoriteList.querySelector("#close-fav"),
 closemoreMusic = musicList.querySelector("#close"),
 uploadBtn = wrapper.querySelector("#upload"),
 changeImgBtn = wrapper.querySelector("#changePic");
@@ -69,8 +70,13 @@ delBtn.addEventListener('click', ()=> {
     songManager.deleteSong(songManager.audioId);
 });
 
+favBtn.addEventListener('click', ()=> {
+    songManager.favoriteSong();
+});
+
 toggleunfavBtn.addEventListener('click', async ()=> {
     moreMusicBtn.click();
+    favoriteList.classList.toggle("show"); // This line toggles the visibility of the favorites list
 });
 
 togglefavBtn.addEventListener('click', async ()=>{
@@ -78,18 +84,22 @@ togglefavBtn.addEventListener('click', async ()=>{
     //songManager.favoriteSong();
 
     let allMusic = await songManager.getAllSongs();
+    //let favoriteMusic = allMusic.filter(song => song.isFavorite);
     const ulTag = wrapper.querySelector("ul");
     ulTag.innerHTML = ''; // Vacía el contenido de ulTag
     
     // let create li tags according to array length for list
     for (let i = 0; i < allMusic.length; i++) {
+    //for (let i = 0; i < favoriteMusic.length; i++) {
         let liTag = document.createElement("li");
         liTag.setAttribute("li-index", allMusic[i].id);
+        //liTag.setAttribute("li-index", favoriteMusic[i].id);
 
         let divTagOuter = document.createElement("div");
         divTagOuter.style.display = "flex";
         divTagOuter.style.justifyContent = "space-between";
         divTagOuter.style.alignItems = "center";
+        divTagOuter.style.position = "relative";
 
         let divTagInner = document.createElement("div");
 
@@ -104,26 +114,31 @@ togglefavBtn.addEventListener('click', async ()=>{
         pTag.style.fontSize = "0.9em"; 
 
         let spanTime = document.createElement("h4");
-        spanTime.style.position = "relative";
-        spanTime.style.right = "100%";
+         spanTime.style.position = "absolute";
+         spanTime.style.justifyContent = "flex-end";
+         spanTime.style.paddingLeft = "285px";
+        
         spanTime.textContent = allMusic[i].duration;
 
         divTagInner.appendChild(h4tag);
         divTagInner.appendChild(spanTag);
         divTagInner.appendChild(pTag);
-        divTagOuter.appendChild(spanTime);
         divTagOuter.appendChild(divTagInner);
+
         liTag.appendChild(divTagOuter);
+        divTagOuter.appendChild(spanTime);
+
 
         liTag.addEventListener('click', () => {
 
             songManager.setSongSelector(allMusic[i].id)
             console.log("Canción cambiada changesongbyid");
-            moreMusicBtn.click();
+            //moreMusicBtn.click();
         });
 
         ulTag.appendChild(liTag);
     }
+
     favoriteList.classList.toggle("show");
 });
 
@@ -182,7 +197,7 @@ moreMusicBtn.addEventListener("click", async ()=>{
             pTag.style.fontSize = "0.9em"; 
 
             let spanTime = document.createElement("h4");
-              spanTime.style.position = "absolute";
+             spanTime.style.position = "absolute";
              spanTime.style.justifyContent = "flex-end";
              spanTime.style.paddingLeft = "285px";
             
@@ -215,6 +230,11 @@ moreMusicBtn.addEventListener("click", async ()=>{
 closemoreMusic.addEventListener("click", ()=>{
   moreMusicBtn.click();
 });
+
+closefav.addEventListener("click", ()=>{
+    togglefavBtn.click();
+    moreMusicBtn.click();
+  });
 
 editBtn.addEventListener('click', async () => {
     const modal = document.getElementById("editModal");
