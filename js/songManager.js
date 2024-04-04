@@ -477,8 +477,10 @@ export class SongManager {
         let musicImg = document.querySelector(".wrapper").querySelector(".img-area img");//
         let musicName = document.querySelector(".wrapper").querySelector(".song-details .name");
         let musicArtist = document.querySelector(".wrapper").querySelector(".song-details .artist");
+        let musicAlbum = document.querySelector(".wrapper").querySelector(".song-details .album-name");
         musicName.innerHTML = this.name;
-        musicArtist.innerHTML = this.author;
+        musicArtist.innerHTML = "By: " + this.author;
+        musicAlbum.innerHTML = "Album: " + this.album;
 
         musicImg.src = this.img;
     }
