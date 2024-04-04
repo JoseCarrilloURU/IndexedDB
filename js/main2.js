@@ -35,6 +35,7 @@ let dbPromise = new Promise((resolve, reject) => {
         let db = dbRequest.result;
         songManager = new SongManager(db,"SongStore");
         console.log("La base de datos ha sido abierta con éxito y pasada a SongManager");
+        moreMusicBtn.click();
       resolve(event.target.result);
     };
 
@@ -163,38 +164,37 @@ moreMusicBtn.addEventListener("click", async ()=>{
             let liTag = document.createElement("li");
             liTag.setAttribute("li-index", allMusic[i].id);
 
-            let divTagOuter = document.createElement("div");
-            divTagOuter.style.display = "flex";
-            divTagOuter.style.justifyContent = "space-between";
-            divTagOuter.style.alignItems = "center";
-            divTagOuter.style.position = "relative";
+            let divTagTime = document.createElement("div");
+            divTagTime.setAttribute("class", "timeStamp");
+
 
             let divTagInner = document.createElement("div");
+            divTagInner.setAttribute("class", "music-info");
 
             let h4tag = document.createElement("h4");
             h4tag.textContent = allMusic[i].name;
 
             let spanTag = document.createElement("span");
             spanTag.textContent = allMusic[i].artist ? "By: " + allMusic[i].artist : "By: undefined";
+            spanTag.setAttribute("class", "listartist");
 
             let pTag = document.createElement("p");
             pTag.textContent = allMusic[i].album ? "Album: " + allMusic[i].album : "Album: undefined";
             pTag.style.fontSize = "0.9em"; 
+            pTag.setAttribute("class", "listalbum");
 
             let spanTime = document.createElement("h4");
-              spanTime.style.position = "absolute";
-             spanTime.style.justifyContent = "flex-end";
-             spanTime.style.paddingLeft = "285px";
+
             
             spanTime.textContent = allMusic[i].duration;
 
             divTagInner.appendChild(h4tag);
             divTagInner.appendChild(spanTag);
             divTagInner.appendChild(pTag);
-            divTagOuter.appendChild(divTagInner);
+            divTagTime.appendChild(spanTime);
 
-            liTag.appendChild(divTagOuter);
-            divTagOuter.appendChild(spanTime);
+            liTag.appendChild(divTagInner);
+            liTag.appendChild(divTagTime);
 
 
             liTag.addEventListener('click', () => {
