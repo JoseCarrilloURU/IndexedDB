@@ -88,18 +88,13 @@ togglefavBtn.addEventListener('click', async ()=>{
     let allMusic = await songManager.getAllSongs();
     console.log("allMusic: ", allMusic);
 
-    //let favoriteMusic = allMusic.filter(song => song.isFavorite);
+    let favoriteMusic = allMusic.filter(song => song.isFavorite);
     const ulTag = wrapper.querySelector("#ulfav");
     ulTag.innerHTML = ''; // Vacía el contenido de ulTag
-    
-    // let create li tags according to array length for list
-    for (let i = 0; i < allMusic.length; i++) {
-        console.log("entro a for de togglefavBtn");
 
-    //for (let i = 0; i < favoriteMusic.length; i++) {
+    for (let i = 0; i < favoriteMusic.length; i++) {
         let liTag = document.createElement("li");
-        liTag.setAttribute("li-index", allMusic[i].id);
-        //liTag.setAttribute("li-index", favoriteMusic[i].id);
+        liTag.setAttribute("li-index", favoriteMusic[i].id);
 
         let divTagOuter = document.createElement("div");
         divTagOuter.style.display = "flex";
