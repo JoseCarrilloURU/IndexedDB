@@ -177,12 +177,11 @@ body{
 }
 .song-details .artist{
   font-size: 18px;
-  opacity: 0.9;
   line-height: 27px;
 }
 .song-details .album-name{
   font-size: 16px;
-  opacity: 0.8;
+  opacity: 0.85;
   line-height: 27px;
 }
 .progress-area{
