@@ -362,7 +362,7 @@ body{
   color: var(--lightblack);
 }
 
-.music-list{
+.music-list, .favorites-list{
   position: absolute;
   background: var(--white);
   width: 100%;
@@ -377,21 +377,21 @@ body{
   box-shadow: 0px -5px 10px rgba(0,0,0,0.1);
   transition: all 0.15s ease-out;
 }
-.music-list.show{
+.music-list.show, .favorites-list.show{
   bottom: 0;
   opacity: 1;
   pointer-events: auto;
 }
-.music-list ul{
+.music-list ul, .favorites-list ul{
   margin: 10px 0;
-  max-height: 94%;
+  max-height: 96%;
   overflow: auto;
 }
-.music-list ul::-webkit-scrollbar{
+.music-list ul::-webkit-scrollbar, .favorites-list ul::-webkit-scrollbar{
   width: 0px;
 }
 
-.music-list ul li{
+.music-list ul li, .favorites-list ul li{
   list-style: none;
   display: flex;
   cursor: pointer;
@@ -400,13 +400,13 @@ body{
   color: var(--lightblack);
   border-bottom: 1px solid #E5E5E5;
 }
-.music-list ul li:last-child{
+.music-list ul li:last-child, .favorites-list ul li:last-child{
   border-bottom: 0px;
 }
-.music-list ul li .row span{
+.music-list ul li .row span, .favorites-list ul li .row span{
   font-size: 17px;
 }
-.music-list ul li .row p{
+.music-list ul li .row p, .favorites-list ul li .row p{
   opacity: 0.9;
 }
 
@@ -432,7 +432,7 @@ body{
   margin-left: 8px;
 }
 
-.favorites-list{
+/* .favorites-list{
   position: absolute;
   background: var(--white);
   width: 100%;
@@ -454,7 +454,7 @@ body{
 }
 .favorites-list ul{
   margin: 10px 0;
-  max-height: 100%;
+  max-height: 96%;
   overflow: auto;
 }
 .favorites-list ul::-webkit-scrollbar{
@@ -477,7 +477,7 @@ body{
 }
 .favorites-list ul li .row p{
   opacity: 0.9;
-}
+}*/
 
 .modal {
   opacity: 0;

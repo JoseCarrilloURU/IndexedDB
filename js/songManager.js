@@ -513,6 +513,7 @@ export class SongManager {
         musicAlbum.innerHTML = "Album: " + this.album;
         favBtn.innerText = this.isFavorite ? "star" : "star_border";
         musicImg.src = this.img;
+        
     }
 
     playlistLoop(){
