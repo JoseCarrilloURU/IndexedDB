@@ -159,7 +159,7 @@ closemoreMusic.addEventListener("click", ()=>{
 
 editBtn.addEventListener('click', async () => {
     const modal = document.getElementById("editModal");
-    modal.style.display = "block";
+    modal.classList.add('show');
 
     const song = await songManager.getSong();
 
@@ -177,68 +177,11 @@ form.addEventListener('submit', (event) => {
     songManager.edit(name, author, album);
 
     const modal = document.getElementById("editModal");
-    modal.style.display = "none";
+    modal.classList.remove('show');
 });
 
 const span = document.getElementsByClassName("close")[0];
 span.onclick = function() {
     const modal = document.getElementById("editModal");
-    modal.style.display = "none";
-
-
+    modal.classList.remove('show');
 }
-
-
-
-/*
-mainAudio.addEventListener("timeupdate", (e)=>{
-    console.log("timeupdate");
-    const currentTime = e.target.currentTime; //getting playing song currentTime
-    const duration = e.target.duration; //getting playing song total duration
-    let progressWidth = (currentTime / duration) * 100;
-    progressBar.style.width = `${progressWidth}%`;
-  
-    let musicCurrentTime = wrapper.querySelector(".current-time"),
-    musicDuartion = wrapper.querySelector(".max-duration");
-    mainAudio.addEventListener("loadeddata", ()=>{
-      // update song total duration
-      let mainAdDuration = mainAudio.duration;
-      let totalMin = Math.floor(mainAdDuration / 60);
-      let totalSec = Math.floor(mainAdDuration % 60);
-      if(totalSec < 10){ //if sec is less than 10 then add 0 before it
-        totalSec = `0${totalSec}`;
-      }
-      musicDuartion.innerText = `${totalMin}:${totalSec}`;
-    });
-    // update playing song current time
-    let currentMin = Math.floor(currentTime / 60);
-    let currentSec = Math.floor(currentTime % 60);
-    if(currentSec < 10){ //if sec is less than 10 then add 0 before it
-      currentSec = `0${currentSec}`;
-    }
-    musicCurrentTime.innerText = `${currentMin}:${currentSec}`;
-  });
-
-// update playing song currentTime on according to the progress bar width
-progressArea.addEventListener("click", (e)=>{
-    let progressWidth = progressArea.clientWidth; //getting width of progress bar
-    let clickedOffsetX = e.offsetX; //getting offset x value
-    let songDuration = mainAudio.duration; //getting song total duration
-    
-    mainAudio.currentTime = (clickedOffsetX / progressWidth) * songDuration;
-    playMusic(); //calling playMusic function
-    playingSong();
-  });
-
-  // update playing song currentTime on according to the progress bar width
-progressArea.addEventListener("click", (e)=>{
-    let progressWidth = progressArea.clientWidth; //getting width of progress bar
-    let clickedOffsetX = e.offsetX; //getting offset x value
-    let songDuration = mainAudio.duration; //getting song total duration
-    
-    mainAudio.currentTime = (clickedOffsetX / progressWidth) * songDuration;
-    playMusic(); //calling playMusic function
-    playingSong();
-  });
-  */
-  

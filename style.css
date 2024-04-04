@@ -1,10 +1,77 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
-*{
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 200;
+  src: url('./fonts/Poppins-200.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 300;
+  src: url('./fonts/Poppins-300.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 400;
+  src: url('./fonts/Poppins-400.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 500;
+  src: url('./fonts/Poppins-500.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 600;
+  src: url('./fonts/Poppins-600.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 700;
+  src: url('./fonts/Poppins-700.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Material Icons';
+  font-style: normal;
+  font-weight: 400;
+  src: url('./icons/MaterialIcons-Regular.ttf') format('truetype');
+}
+
+.material-icons {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;  /* you can change this value to adjust the icon size */
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: 'liga';
+}
+
+*:not(.material-icons){
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-family: "Poppins", sans-serif;
 }
+
 *::before, *::after{
   padding: 0;
   margin: 0;
@@ -57,7 +124,7 @@ body{
 .top-bar i{
   user-select: none;
   font-size: 30px;
-  background: linear-gradient(var(--blue) 0%, var(--navy) 100%);
+  background: linear-gradient(var(--lightblack) 0%, var(--black) 100%);
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -134,7 +201,7 @@ body{
   width: 0%;
   position: relative;
   border-radius: inherit;
-  background: linear-gradient(90deg, var(--blue) 0%, var(--navy) 100%);
+  background: linear-gradient(90deg, var(--lightblack) 0%, var(--black) 100%);
 }
 .progress-bar::before{
   content: "";
@@ -229,7 +296,7 @@ body{
   border-radius: 50%;
   z-index: 1;
   background: linear-gradient(var(--white) 0%, var(--darkwhite) 100%);
-  box-shadow: 0px 0px 5px var(--blue);
+  box-shadow: 0px 0px 5px var(--lightblack);
 }
 
 #uploadnew::before {
@@ -241,7 +308,7 @@ body{
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: linear-gradient(var(--blue) 0%, var(--navy) 100%);
+  background: linear-gradient(var(--lightblack) 0%, var(--black) 100%);
 }
 
 #uploadnew i{
@@ -285,7 +352,7 @@ body{
   font-size: 30px;
   user-select: none;
   cursor: pointer;
-  background: linear-gradient(var(--blue) 0%, var(--navy) 100%);
+  background: linear-gradient(var(--lightblack) 0%, var(--black) 100%);
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -352,35 +419,44 @@ ul li.playing{
 }
 
 .modal {
-  display: none; /* Hidden by default */
+  opacity: 0;
+  visibility: hidden;
   position: fixed; /* Stay in place */
   z-index: 1; /* Sit on top */
   left: 0;
   top: 0;
   width: 100%; /* Full width */
   height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  background-color: rgba(0,0,0,0.4);
+  box-shadow: 0px -5px 10px rgba(0,0,0,0.1);
+  transition: opacity 0.8s, visibility 0.8s;
+}
+
+.modal.show {
+  opacity: 1;
+  visibility: visible;
+  display: block;
 }
 
 /* Modal Content/Box */
 .modal-content {
   background-color: #fefefe;
   margin: 15% auto; /* 15% from the top and centered */
-  padding: 20px;
-  border: 1px solid #888;
-  width: 30%; /* Could be more or less, depending on screen size */
+  padding: 25px;
+  border: 6px solid #ffffff;
+  width: 28%; /* Could be more or less, depending on screen size */
   border-radius: 10px; /* This will make the corners rounded */
 }
 
 .modal-content form {
-  text-align: left; /* Align elements to the left */
+  text-align: left;
+
 }
 
 .modal-content input[type="text"] {
   border: none; /* Remove all borders */
-  border-bottom: 1px solid #000; /* Add bottom border */
+  border-bottom: 2px solid #000; /* Add bottom border */
+  margin: 1% 0 5% 0;
 }
 
 .modal-content input[type="text"]:focus {
@@ -388,11 +464,14 @@ ul li.playing{
 }
 
 .modal-content input[type="submit"] {
+  cursor: pointer;
   display: inline-block;
-  margin-top: 20px; /* Add top margin */
-  background: linear-gradient(to right, #4d7bb6, #9fabbb);
-  width: 100px; /* Adjust width as needed */
-  height: 30px; /* Adjust height as needed */
+  font-size: 17px;
+  margin-top: 16px; /* Add top margin */
+  color: White;
+  background: linear-gradient(var(--lightblack) 0%, var(--black) 100%);
+  width: 80px; /* Adjust width as needed */
+  height: 40px; /* Adjust height as needed */
   border: none; /* Remove all borders */
   border-radius: 10px;
 }
@@ -401,11 +480,10 @@ ul li.playing{
   text-align: right;
 }
 
-/* The Close Button */
 .close {
   color: #aaa;
   float: right;
-  font-size: 28px;
+  font-size: 36px;
   font-weight: bold;
 }
 

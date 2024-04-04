@@ -7,10 +7,6 @@
     <link rel="icon" href="favicon.ico" type="image/x-icon" />
     <title>Music Player</title>
     <link rel="stylesheet" href="style.css" />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/icon?family=Material+Icons"
-    />
   </head>
   <body>
     <div class="wrapper">
@@ -24,7 +20,7 @@
         </i>
         <i id="changePic" class="material-icons" title="Change Song Picture"
           >add_photo_alternate
-        </i> 
+        </i>
         <i id="favorite" class="material-icons" title="Favorite">star_border</i>
         <i id="edit" class="material-icons" title="Edit Song Data"
           >drive_file_rename_outline</i
@@ -74,19 +70,36 @@
       </div>
     </div>
 
-    
     <div id="editModal" class="modal">
       <div class="modal-content">
         <span class="close">&times;</span>
         <form id="editForm">
-          <label for="name">Name:</label><br>
-          <input type="text" id="name" name="name" autocomplete="off" required><br>
-          <label for="author">Author:</label><br>
-          <input type="text" id="author" name="author" autocomplete="off" required><br>
-          <label for="album">Album:</label><br>
-          <input type="text" id="album" name="album" autocomplete="off" required><br>
+          <h3 for="name">Song Name:</h3>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            autocomplete="off"
+            required
+          /><br />
+          <h3 for="name">Song Author:</h3>
+          <input
+            type="text"
+            id="author"
+            name="author"
+            autocomplete="off"
+            required
+          /><br />
+          <h3 for="name">Album:</h3>
+          <input
+            type="text"
+            id="album"
+            name="album"
+            autocomplete="off"
+            required
+          /><br />
           <div class="button-container">
-            <input type="submit" value="Aceptar">
+            <input type="submit" value="OK" />
           </div>
         </form>
       </div>
