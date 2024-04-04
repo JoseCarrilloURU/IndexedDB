@@ -237,24 +237,6 @@ export class SongManager {
             console.log("Error al borrar el objeto", e.target.error);
         };
     }
-    getFavoriteSongs() {
-        return new Promise((resolve, reject) => {
-            let transaction = this.db.transaction([this.storeName], "readonly");
-            let store = transaction.objectStore(this.storeName);
-            let index = store.index("isFavorite");
-            let range = IDBKeyRange.only(true);
-            let getAllRequest = index.getAll(range);
-
-            getAllRequest.onsuccess = () => {
-                let favoriteSongs = getAllRequest.result;
-                resolve(favoriteSongs);
-            };
-
-            getAllRequest.onerror = function(e) {
-                reject(e.target.error);
-            };
-        });
-    }
 
     getAllSongs() {
         return new Promise((resolve, reject) => {
