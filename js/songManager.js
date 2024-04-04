@@ -98,7 +98,7 @@ export class SongManager {
 
 
 
-            if (this.shufle && !this.selector) {
+            if (this.shuffle && !this.selector) {
                 console.log(!this.selector)
                 let randomSong;
                 do {
@@ -425,7 +425,7 @@ export class SongManager {
         });
     }
 
-    edit(name,author, album ) {
+    edit(name,author, album) {
         const transaction = this.db.transaction([this.storeName], "readwrite");
         const store = transaction.objectStore(this.storeName);
         const getRequest = store.get(this.audioId);
@@ -492,10 +492,10 @@ export class SongManager {
                 break;
             case 2:
                 this.audio.loop = false;
-                this.shufle= true;
+                this.shuffle= true;
                 break;
             case 3:
-                this.shufle= false;
+                this.shuffle= false;
                 this.loopcounter = 0;
                 break;
         }
@@ -526,7 +526,7 @@ export class SongManager {
         });
 
         this.audio.addEventListener("loadeddata", ()=>{
-        const musicDuartion = wrapper.querySelector(".max-duration");
+        const musicDuration = wrapper.querySelector(".max-duration");
         // update song total duration
         let mainAdDuration = this.audio.duration;
         let totalMin = Math.floor(mainAdDuration / 60);
@@ -534,7 +534,7 @@ export class SongManager {
         if(totalSec < 10){ //if sec is less than 10 then add 0 before it
             totalSec = `0${totalSec}`;
         }
-        musicDuartion.innerText = `${totalMin}:${totalSec}`;
+        musicDuration.innerText = `${totalMin}:${totalSec}`;
         });
 
         this.audio.addEventListener("ended", ()=>{
