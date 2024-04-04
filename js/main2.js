@@ -72,6 +72,7 @@ delBtn.addEventListener('click', ()=> {
 });
 
 favBtn.addEventListener('click', ()=> {
+    console.log("favpressed")
     songManager.favoriteSong();
 });
 

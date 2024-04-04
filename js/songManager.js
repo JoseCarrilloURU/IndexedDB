@@ -502,13 +502,16 @@ export class SongManager {
     }
 
     syncInfoSong() {
+        let favBtn = document.querySelector(".wrapper").querySelector("#favorite");
         let musicImg = document.querySelector(".wrapper").querySelector(".img-area img");//
         let musicName = document.querySelector(".wrapper").querySelector(".song-details .name");
         let musicArtist = document.querySelector(".wrapper").querySelector(".song-details .artist");
         let musicAlbum = document.querySelector(".wrapper").querySelector(".song-details .album-name");
+        
         musicName.innerHTML = this.name;
         musicArtist.innerHTML = "By: " + this.author;
         musicAlbum.innerHTML = "Album: " + this.album;
+        favBtn.innerText = this.isFavorite ? "star" : "star_border";
         musicImg.src = this.img;
         
     }
