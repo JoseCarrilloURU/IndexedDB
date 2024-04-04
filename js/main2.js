@@ -136,7 +136,9 @@ moreMusicBtn.addEventListener("click", async ()=>{
             liTag.appendChild(divTagOuter);
 
             liTag.addEventListener('click', () => {
-                songManager.setSong(allMusic[i].id);
+
+                songManager.setSongSelector(allMusic[i].id)
+                console.log("Canción cambiada changesongbyid");
             });
 
             ulTag.appendChild(liTag);
@@ -144,14 +146,7 @@ moreMusicBtn.addEventListener("click", async ()=>{
     }
     
     musicList.classList.toggle("show");
-    let liTags = ulTag.querySelectorAll('li');
-    liTags.forEach((liTag) => {
-        liTag.addEventListener('click', async () => {
-            let id = liTag.getAttribute("li-index");
-            songManager.changeSongById(id)
-            moreMusicBtn.click();
-        });
-    });
+
 });
 
 closemoreMusic.addEventListener("click", ()=>{
@@ -186,3 +181,25 @@ span.onclick = function() {
     const modal = document.getElementById("editModal");
     modal.classList.remove('show');
 }
+
+
+const repeatBtn = wrapper.querySelector("#repeat-plist");
+repeatBtn.addEventListener("click", ()=>{
+  let getText = repeatBtn.innerText; //getting this tag innerText
+  songManager.playlistLoop();
+  switch(getText){
+    case "repeat":
+      repeatBtn.innerText = "repeat_one";
+      repeatBtn.setAttribute("title", "Song Looped");
+      break;
+    case "repeat_one":
+      repeatBtn.innerText = "shuffle";
+      repeatBtn.setAttribute("title", "Playlist Shuffled");
+      break;
+    case "shuffle":
+      repeatBtn.innerText = "repeat";
+      repeatBtn.setAttribute("title", "Playlist Looped");
+      break;
+  }
+});
+  
