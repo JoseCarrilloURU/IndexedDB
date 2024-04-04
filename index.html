@@ -55,13 +55,37 @@
           <i class="material-icons play">play_arrow</i>
         </div>
         <i id="next" class="material-icons">skip_next</i>
-        <i id="more-music" class="material-icons">queue_music</i>
+        <i id="more-music" class="material-icons" title="List of Songs"
+          >queue_music</i
+        >
       </div>
       <div class="music-list">
         <div class="header">
           <div class="row">
-            <i id="toggle-fav" class="list material-icons">queue_music</i>
+            <i
+              id="toggle-fav"
+              class="list material-icons"
+              title="Switch to List of Favorites"
+              >queue_music</i
+            >
             <span>List of Songs</span>
+          </div>
+          <i id="close" class="material-icons">close</i>
+        </div>
+        <ul>
+          <!-- here li list are coming from js -->
+        </ul>
+      </div>
+      <div class="favorites-list">
+        <div class="header">
+          <div class="row">
+            <i
+              id="toggle-unfav"
+              class="list material-icons"
+              title="Switch to List of Songs"
+              >star</i
+            >
+            <span>List of Favorites</span>
           </div>
           <i id="close" class="material-icons">close</i>
         </div>

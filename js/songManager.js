@@ -4,7 +4,6 @@ import process from 'process';
 window.Buffer = Buffer;
 window.process = process;
 
-
 export class SongManager {
     constructor(db, storeName) {
         this.db = db;
@@ -312,7 +311,7 @@ export class SongManager {
                 console.log("Canciones cargadas con éxito", this.songs);
                 if (this.songs.length == 0) {
                     // If there are no songs, click the music list button
-                    document.querySelector('#more-music').click();                                                //
+                    document.querySelector('#more-music').click();
                 }else{
                     this.setSong(this.songs[0]);
                     
@@ -566,6 +565,12 @@ export class SongManager {
 
     }
 
+    favoriteSong(){
+        let favBtn = document.querySelector(".wrapper").querySelector("#favorite");
+            const isFav = favBtn.innerText === "star";
+            isFav ? favBtn.innerText = "star_border" : favBtn.innerText = "star";
+    }
+
     async setSongSelector(id){
         this.audioId = id;
         this.audioChange = true;
@@ -573,8 +578,5 @@ export class SongManager {
         await this.setSong(this.audioId);
         this.playSong();
     }
-
-
-
 }
 

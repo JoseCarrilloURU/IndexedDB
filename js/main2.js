@@ -7,9 +7,6 @@ favBtn = wrapper.querySelector("#favorite"),
 playPauseBtn = wrapper.querySelector(".play-pause"),
 prevBtn = wrapper.querySelector("#prev"),
 nextBtn = wrapper.querySelector("#next"),
-mainAudio = wrapper.querySelector("#main-audio"),
-progressArea = wrapper.querySelector(".progress-area"),
-progressBar = progressArea.querySelector(".progress-bar"),
 musicList = wrapper.querySelector(".music-list"),
 moreMusicBtn = wrapper.querySelector("#more-music"),
 togglefavBtn = musicList.querySelector("#toggle-fav"),
@@ -44,8 +41,10 @@ let dbPromise = new Promise((resolve, reject) => {
       };
 });
 
-
-
+favBtn.addEventListener('click', ()=>{
+    console.log("FavBtn clicked");
+    songManager.favoriteSong();
+});
 
 uploadBtn.addEventListener('click', ()=>{
     console.log("uploadButton clicked");
@@ -107,6 +106,7 @@ moreMusicBtn.addEventListener("click", async ()=>{
         closemoreMusic.style.visibility = 'visible';
         closemoreMusic.style.pointerEvents = 'auto';  
         togglefavBtn.style.pointerEvents = 'auto';
+        
         // let create li tags according to array length for list
         for (let i = 0; i < allMusic.length; i++) {
             let liTag = document.createElement("li");
@@ -132,6 +132,7 @@ moreMusicBtn.addEventListener("click", async ()=>{
             divTagInner.appendChild(h4tag);
             divTagInner.appendChild(spanTag);
             divTagInner.appendChild(pTag);
+            divTagInner.appendChild(musicTag);
             divTagOuter.appendChild(divTagInner);
             liTag.appendChild(divTagOuter);
 
