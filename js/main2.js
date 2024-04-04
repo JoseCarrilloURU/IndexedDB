@@ -129,8 +129,13 @@ moreMusicBtn.addEventListener("click", async ()=>{
             pTag.textContent = allMusic[i].album ? "Album: " + allMusic[i].album : "Album: undefined";
             pTag.style.fontSize = "0.9em"; 
 
+            let spanTime = document.createElement("span");
+            spanTime.style.textAlign = 'left';
+            spanTime.textContent =" time:" + allMusic[i].duration;
+
             divTagInner.appendChild(h4tag);
             divTagInner.appendChild(spanTag);
+            divTagInner.appendChild(spanTime);
             divTagInner.appendChild(pTag);
             divTagOuter.appendChild(divTagInner);
             liTag.appendChild(divTagOuter);
