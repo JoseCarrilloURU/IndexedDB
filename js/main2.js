@@ -11,6 +11,7 @@ musicList = wrapper.querySelector(".music-list"),
 moreMusicBtn = wrapper.querySelector("#more-music"),
 favoriteList = wrapper.querySelector(".favorites-list"),
 togglefavBtn = musicList.querySelector("#toggle-fav"),
+toggleunfavBtn = favoriteList.querySelector("#toggle-unfav"),
 closemoreMusic = musicList.querySelector("#close"),
 uploadBtn = wrapper.querySelector("#upload"),
 changeImgBtn = wrapper.querySelector("#changePic");
@@ -68,6 +69,10 @@ delBtn.addEventListener('click', ()=> {
     songManager.deleteSong(songManager.audioId);
 });
 
+toggleunfavBtn.addEventListener('click', async ()=> {
+    moreMusicBtn.click();
+});
+
 togglefavBtn.addEventListener('click', async ()=>{
     moreMusicBtn.click();
     //songManager.favoriteSong();
@@ -99,8 +104,8 @@ togglefavBtn.addEventListener('click', async ()=>{
         pTag.style.fontSize = "0.9em"; 
 
         let spanTime = document.createElement("h4");
-        spanTime.style.position = "absolute";
-        spanTime.style.right = "35px";
+        spanTime.style.position = "relative";
+        spanTime.style.right = "100%";
         spanTime.textContent = allMusic[i].duration;
 
         divTagInner.appendChild(h4tag);
@@ -162,6 +167,7 @@ moreMusicBtn.addEventListener("click", async ()=>{
             divTagOuter.style.display = "flex";
             divTagOuter.style.justifyContent = "space-between";
             divTagOuter.style.alignItems = "center";
+            divTagOuter.style.position = "relative";
 
             let divTagInner = document.createElement("div");
 
@@ -176,16 +182,20 @@ moreMusicBtn.addEventListener("click", async ()=>{
             pTag.style.fontSize = "0.9em"; 
 
             let spanTime = document.createElement("h4");
-            spanTime.style.position = "absolute";
-            spanTime.style.right = "35px";
+              spanTime.style.position = "absolute";
+             spanTime.style.justifyContent = "flex-end";
+             spanTime.style.paddingLeft = "285px";
+            
             spanTime.textContent = allMusic[i].duration;
 
             divTagInner.appendChild(h4tag);
             divTagInner.appendChild(spanTag);
             divTagInner.appendChild(pTag);
-            divTagOuter.appendChild(spanTime);
             divTagOuter.appendChild(divTagInner);
+
             liTag.appendChild(divTagOuter);
+            divTagOuter.appendChild(spanTime);
+
 
             liTag.addEventListener('click', () => {
 
