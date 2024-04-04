@@ -200,9 +200,6 @@ moreMusicBtn.addEventListener("click", async ()=>{
 
             let spanTime = document.createElement("h4");
 
-             spanTime.style.position = "absolute";
-             spanTime.style.justifyContent = "flex-end";
-             spanTime.style.paddingLeft = "285px";
             
             spanTime.textContent = allMusic[i].duration;
 
