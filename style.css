@@ -162,15 +162,6 @@ body{
   object-fit: cover;
 }
 
-.spinning {
-  animation: spin 20s linear infinite;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
 .slider:hover {
   opacity: 1; /* Fully shown on mouse-over */
 }
@@ -187,6 +178,11 @@ body{
 .song-details .artist{
   font-size: 18px;
   opacity: 0.9;
+  line-height: 27px;
+}
+.song-details .album-name{
+  font-size: 16px;
+  opacity: 0.8;
   line-height: 27px;
 }
 .progress-area{
@@ -413,10 +409,6 @@ body{
 ul li .audio-duration{
   font-size: 16px;
 }
-ul li.playing{
-  pointer-events: none;
-  color: var(--navy);
-}
 
 .modal {
   opacity: 0;
@@ -493,4 +485,3 @@ ul li.playing{
   text-decoration: none;
   cursor: pointer;
 }
-

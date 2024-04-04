@@ -4,9 +4,6 @@ const wrapper = document.querySelector(".wrapper"),
 editBtn = wrapper.querySelector("#edit"),
 delBtn = wrapper.querySelector("#delete"),
 favBtn = wrapper.querySelector("#favorite"),
-musicImg = wrapper.querySelector(".img-area img"), // 
-musicName = wrapper.querySelector(".song-details .name"), // 
-musicArtist = wrapper.querySelector(".song-details .artist"), //
 playPauseBtn = wrapper.querySelector(".play-pause"),
 prevBtn = wrapper.querySelector("#prev"),
 nextBtn = wrapper.querySelector("#next"),
@@ -122,12 +119,17 @@ moreMusicBtn.addEventListener("click", async ()=>{
 
             let divTagInner = document.createElement("div");
 
+            let h4tag = document.createElement("h4");
+            h4tag.textContent = allMusic[i].name;
+
             let spanTag = document.createElement("span");
-            spanTag.textContent = allMusic[i].name;
+            spanTag.textContent = allMusic[i].artist ? "By: " + allMusic[i].artist : "By: undefined";
 
             let pTag = document.createElement("p");
-            pTag.textContent = allMusic[i].album;
+            pTag.textContent = allMusic[i].album ? "Album: " + allMusic[i].album : "Album: undefined";
+            pTag.style.fontSize = "0.9em"; 
 
+            divTagInner.appendChild(h4tag);
             divTagInner.appendChild(spanTag);
             divTagInner.appendChild(pTag);
             divTagOuter.appendChild(divTagInner);
@@ -141,7 +143,6 @@ moreMusicBtn.addEventListener("click", async ()=>{
 
             ulTag.appendChild(liTag);
         }
-
     }
     
     musicList.classList.toggle("show");
