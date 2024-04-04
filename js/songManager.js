@@ -39,13 +39,8 @@ export class SongManager {
             console.log("Imagen por defecto cargada", imageObject);
         }).catch(error => {
             console.error("Error al cargar la imagen por defecto", error);
-        });
-        
-        
-        
-        
+        });        
         console.log("SongManager creado");
-
     }
 
     //añade cancion id 0
@@ -63,7 +58,7 @@ export class SongManager {
             img = this.defaultImg;
             console.log("Imagen de canción vacía, se ha cambiado a ", this.defaultImg);
         }
-        let request = store.add({id: this.idforNewSong, name: name, author: author, album: album, file: file,img: img, isFavorite: false,duration: duration});
+        let request = store.add({id: this.idforNewSong, name: name, author: author, album: album, file: file,img: img, isFavorite: false, duration: duration});
         request.onsuccess = (e)=> {
             this.songs.push(this.idforNewSong++)
             console.log("Canción añadida con éxito");
@@ -78,7 +73,6 @@ export class SongManager {
         };
         
     }
-
 
     setSong(id) {
         return new Promise((resolve, reject) => {
@@ -139,6 +133,12 @@ export class SongManager {
 
             };
         });
+    }
+
+    favoriteSong(){
+        let favBtn = document.querySelector(".wrapper").querySelector("#favorite");
+            const isFav = favBtn.innerText === "star";
+            isFav ? favBtn.innerText = "star_border" : favBtn.innerText = "star";
     }
 
     async playSong(){
@@ -210,6 +210,24 @@ export class SongManager {
         request.onerror = function(e) {
             console.log("Error al borrar el objeto", e.target.error);
         };
+    }
+    getFavoriteSongs() {
+        return new Promise((resolve, reject) => {
+            let transaction = this.db.transaction([this.storeName], "readonly");
+            let store = transaction.objectStore(this.storeName);
+            let index = store.index("isFavorite");
+            let range = IDBKeyRange.only(true);
+            let getAllRequest = index.getAll(range);
+
+            getAllRequest.onsuccess = () => {
+                let favoriteSongs = getAllRequest.result;
+                resolve(favoriteSongs);
+            };
+
+            getAllRequest.onerror = function(e) {
+                reject(e.target.error);
+            };
+        });
     }
 
     getAllSongs() {
@@ -552,7 +570,6 @@ export class SongManager {
             let songDuration = this.audio.duration; //getting song total duration
             
             this.audio.currentTime = (clickedOffsetX / progressWidth) * songDuration;
-
           });
         
           // update playing song currentTime on according to the progress bar width
@@ -568,10 +585,16 @@ export class SongManager {
 
     }
 
-    favoriteSong(){
-        let favBtn = document.querySelector(".wrapper").querySelector("#favorite");
-            const isFav = favBtn.innerText === "star";
-            isFav ? favBtn.innerText = "star_border" : favBtn.innerText = "star";
+    secondsToHms(d) {
+        d = Number(d);
+        let h = Math.floor(d / 3600);
+        let m = Math.floor(d % 3600 / 60);
+        let s = Math.floor(d % 3600 % 60);
+
+        let hourD = h > 0 ? (h < 10 ? '0' + h : h) + ':' : '';
+        let minuteD = (h > 0 && m < 10) ? '0' + m : m;
+        let segD = s < 10 ? '0' + s : s;
+        return hourD + minuteD + ':' + segD; 
     }
 
     async setSongSelector(id){
@@ -581,19 +604,5 @@ export class SongManager {
         await this.setSong(this.audioId);
         this.playSong();
     }
-
-secondsToHms(d) {
-    d = Number(d);
-    let h = Math.floor(d / 3600);
-    let m = Math.floor(d % 3600 / 60);
-    let s = Math.floor(d % 3600 % 60);
-
-    let hourD = h > 0 ? (h < 10 ? '0' + h : h) + ':' : '';
-    let minuteD = (h > 0 && m < 10) ? '0' + m : m;
-    let segD = s < 10 ? '0' + s : s;
-    return hourD + minuteD + ':' + segD; 
-}
-
-
 }
 

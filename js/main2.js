@@ -9,6 +9,7 @@ prevBtn = wrapper.querySelector("#prev"),
 nextBtn = wrapper.querySelector("#next"),
 musicList = wrapper.querySelector(".music-list"),
 moreMusicBtn = wrapper.querySelector("#more-music"),
+favoriteList = wrapper.querySelector(".favorites-list"),
 togglefavBtn = musicList.querySelector("#toggle-fav"),
 closemoreMusic = musicList.querySelector("#close"),
 uploadBtn = wrapper.querySelector("#upload"),
@@ -41,19 +42,12 @@ let dbPromise = new Promise((resolve, reject) => {
       };
 });
 
-favBtn.addEventListener('click', ()=>{
-    console.log("FavBtn clicked");
-    songManager.favoriteSong();
-});
-
 uploadBtn.addEventListener('click', ()=>{
-    console.log("uploadButton clicked");
     songManager.uploadSong();
 
 });
 
 playPauseBtn.addEventListener('click', ()=> {
-    console.log("playButton clicked");
     songManager.playSong();
 
 });
@@ -67,13 +61,65 @@ nextBtn.addEventListener('click', ()=> {
 });
 
 /* changePic.addEventListener('click', ()=> {
-    console.log("changePic clicked");
     songManager.changePic();
 }); */
 
 delBtn.addEventListener('click', ()=> {
-    console.log("deleteButton clicked");
     songManager.deleteSong(songManager.audioId);
+});
+
+togglefavBtn.addEventListener('click', async ()=>{
+    moreMusicBtn.click();
+    //songManager.favoriteSong();
+
+    let allMusic = await songManager.getAllSongs();
+    const ulTag = wrapper.querySelector("ul");
+    ulTag.innerHTML = ''; // Vacía el contenido de ulTag
+    
+    // let create li tags according to array length for list
+    for (let i = 0; i < allMusic.length; i++) {
+        let liTag = document.createElement("li");
+        liTag.setAttribute("li-index", allMusic[i].id);
+
+        let divTagOuter = document.createElement("div");
+        divTagOuter.style.display = "flex";
+        divTagOuter.style.justifyContent = "space-between";
+        divTagOuter.style.alignItems = "center";
+
+        let divTagInner = document.createElement("div");
+
+        let h4tag = document.createElement("h4");
+        h4tag.textContent = allMusic[i].name;
+
+        let spanTag = document.createElement("span");
+        spanTag.textContent = allMusic[i].artist ? "By: " + allMusic[i].artist : "By: undefined";
+
+        let pTag = document.createElement("p");
+        pTag.textContent = allMusic[i].album ? "Album: " + allMusic[i].album : "Album: undefined";
+        pTag.style.fontSize = "0.9em"; 
+
+        let spanTime = document.createElement("h4");
+        spanTime.style.position = "absolute";
+        spanTime.style.right = "35px";
+        spanTime.textContent = allMusic[i].duration;
+
+        divTagInner.appendChild(h4tag);
+        divTagInner.appendChild(spanTag);
+        divTagInner.appendChild(pTag);
+        divTagOuter.appendChild(spanTime);
+        divTagOuter.appendChild(divTagInner);
+        liTag.appendChild(divTagOuter);
+
+        liTag.addEventListener('click', () => {
+
+            songManager.setSongSelector(allMusic[i].id)
+            console.log("Canción cambiada changesongbyid");
+            moreMusicBtn.click();
+        });
+
+        ulTag.appendChild(liTag);
+    }
+    favoriteList.classList.toggle("show");
 });
 
 moreMusicBtn.addEventListener("click", async ()=>{
@@ -129,15 +175,15 @@ moreMusicBtn.addEventListener("click", async ()=>{
             pTag.textContent = allMusic[i].album ? "Album: " + allMusic[i].album : "Album: undefined";
             pTag.style.fontSize = "0.9em"; 
 
-            let spanTime = document.createElement("span");
-            spanTime.style.textAlign = 'left';
-            spanTime.textContent =" time:" + allMusic[i].duration;
+            let spanTime = document.createElement("h4");
+            spanTime.style.position = "absolute";
+            spanTime.style.right = "35px";
+            spanTime.textContent = allMusic[i].duration;
 
             divTagInner.appendChild(h4tag);
             divTagInner.appendChild(spanTag);
-            divTagInner.appendChild(spanTime);
             divTagInner.appendChild(pTag);
-            divTagInner.appendChild(musicTag);
+            divTagOuter.appendChild(spanTime);
             divTagOuter.appendChild(divTagInner);
             liTag.appendChild(divTagOuter);
 
