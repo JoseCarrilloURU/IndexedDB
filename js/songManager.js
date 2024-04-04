@@ -509,8 +509,8 @@ export class SongManager {
         musicName.innerHTML = this.name;
         musicArtist.innerHTML = "By: " + this.author;
         musicAlbum.innerHTML = "Album: " + this.album;
-
         musicImg.src = this.img;
+        
     }
 
     playlistLoop(){
