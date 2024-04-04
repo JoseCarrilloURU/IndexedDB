@@ -139,6 +139,7 @@ moreMusicBtn.addEventListener("click", async ()=>{
 
                 songManager.setSongSelector(allMusic[i].id)
                 console.log("Canción cambiada changesongbyid");
+                moreMusicBtn.click();
             });
 
             ulTag.appendChild(liTag);
