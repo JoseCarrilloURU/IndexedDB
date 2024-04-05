@@ -159,6 +159,7 @@ export class SongManager {
                     }
                     if (this.favoritelist.length == 0) {
                         this.changeSongsType();
+                        console.log("No hay canciones favoritas asi que cambia");
                     }
                     
                 }
@@ -347,12 +348,14 @@ export class SongManager {
     }
     
     changeSongsType(){
+        let changeTypeBtn = document.querySelector(".wrapper").querySelector("#changeType");
         if(this.favoritelist.length == 0){
             console.log('No hay canciones favoritas');
+            changeTypeBtn.innerText = "source";
+            this.songs = this.songsList;
         }else{
             this.songs = (this.songsList == this.songs) ? this.favoritelist : this.songsList;
             console.log("canciones", this.songs);
-            let changeTypeBtn = document.querySelector(".wrapper").querySelector("#changeType");
 
             changeTypeBtn.innerText = (this.songs == this.favoritelist) ? "folder_special" : "source";
         }
