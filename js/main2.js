@@ -63,9 +63,9 @@ nextBtn.addEventListener('click', ()=> {
     songManager.nextSong();
 });
 
-/* changePic.addEventListener('click', ()=> {
-    songManager.changePic();
-}); */
+ changePic.addEventListener('click', ()=> {
+    songManager.changeSongsType();
+}); 
 
 delBtn.addEventListener('click', ()=> {
     songManager.deleteSong(songManager.audioId);
@@ -73,7 +73,7 @@ delBtn.addEventListener('click', ()=> {
 
 favBtn.addEventListener('click', ()=> {
     console.log("favpressed")
-    songManager.favoriteSong();
+    songManager.setFavoriteSong();
 });
 
 toggleunfavBtn.addEventListener('click', async ()=> {
@@ -86,10 +86,7 @@ togglefavBtn.addEventListener('click', async ()=>{
     //songManager.favoriteSong();
     console.log("togglefavBtn clicked");
 
-    let allMusic = await songManager.getAllSongs();
-    console.log("allMusic: ", allMusic);
-
-    let favoriteMusic = allMusic.filter(song => song.isFavorite);
+    let favoriteMusic = await songManager.getFavoriteSongs();
     const ulTag = wrapper.querySelector("#ulfav");
     ulTag.innerHTML = ''; // Vacía el contenido de ulTag
 
@@ -106,13 +103,13 @@ togglefavBtn.addEventListener('click', async ()=>{
         let divTagInner = document.createElement("div");
 
         let h4tag = document.createElement("h4");
-        h4tag.textContent = allMusic[i].name;
+        h4tag.textContent = favoriteMusic[i].name;
 
         let spanTag = document.createElement("span");
-        spanTag.textContent = allMusic[i].artist ? "By: " + allMusic[i].artist : "By: undefined";
+        spanTag.textContent = favoriteMusic[i].artist ? "By: " + favoriteMusic[i].artist : "By: undefined";
 
         let pTag = document.createElement("p");
-        pTag.textContent = allMusic[i].album ? "Album: " + allMusic[i].album : "Album: undefined";
+        pTag.textContent = favoriteMusic[i].album ? "Album: " + favoriteMusic[i].album : "Album: undefined";
         pTag.style.fontSize = "0.9em"; 
 
         let spanTime = document.createElement("h4");
@@ -120,7 +117,7 @@ togglefavBtn.addEventListener('click', async ()=>{
          spanTime.style.justifyContent = "flex-end";
          spanTime.style.paddingLeft = "285px";
         
-        spanTime.textContent = allMusic[i].duration;
+        spanTime.textContent = favoriteMusic[i].duration;
 
         divTagInner.appendChild(h4tag);
         divTagInner.appendChild(spanTag);
@@ -133,9 +130,9 @@ togglefavBtn.addEventListener('click', async ()=>{
 
         liTag.addEventListener('click', () => {
 
-            songManager.setSongSelector(allMusic[i].id)
+            songManager.setSongSelector(favoriteMusic[i].id)
             console.log("Canción cambiada changesongbyid");
-            //moreMusicBtn.click();
+            favoriteList.classList.toggle("show");
         });
 
         ulTag.appendChild(liTag);

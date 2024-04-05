@@ -9,6 +9,10 @@ export class SongManager {
         this.db = db;
         this.storeName = storeName;
 
+        this.songs = [];
+        this.favoritelist = [];
+        this.songsList = [];
+
         this.audioChange = false;
 
         this.idforNewSong = null;
@@ -61,10 +65,10 @@ export class SongManager {
         }
         let request = store.add({id: this.idforNewSong, name: name, author: author, album: album, file: file,img: img, isFavorite: false, duration: duration});
         request.onsuccess = (e)=> {
-            this.songs.push(this.idforNewSong++)
+            this.songsList.push(this.idforNewSong++)
             console.log("Canción añadida con éxito");
-            if (this.songs.length === 1) {
-                this.setSong(this.songs[0]).then(()=> {
+            if (this.songsList.length === 1) {
+                this.setSong(this.songsList[0]).then(()=> {
                     this.playSong();
                 });
             }
@@ -134,7 +138,7 @@ export class SongManager {
         });
     }
 
-    favoriteSong(){
+    setFavoriteSong(){
         let favBtn = document.querySelector(".wrapper").querySelector("#favorite");
         this.isFavorite = !this.isFavorite; // Toggle isFavorite variable
 
@@ -146,25 +150,21 @@ export class SongManager {
                 let song = request.result;
                 song.isFavorite = this.isFavorite;
                 store.put(song);
+
+                this.favoritelist.push(this.audioId);
+                console.log("Canción favorita añadida con éxito", this.favoritelist);
             };
             favBtn.innerText = this.isFavorite ? "star" : "star_border";
     }
 
     getFavoriteSongs() {
         return new Promise((resolve, reject) => {
-            let transaction = this.db.transaction([this.storeName], "readonly");
-            let store = transaction.objectStore(this.storeName);
-            let request = store.getAll();
-            request.onsuccess = () => {
-                let songs = request.result;
+            this.getAllSongs().then(songs => {
                 let favoriteSongs = songs.filter(song => song.isFavorite);
                 resolve(favoriteSongs);
-            };
-            request.onerror = (e) => {
-                console.log("Error getting all songs", e.target.error);
-                reject(e.target.error);
-            };
+            }).catch(error => { reject(error); } );
         });
+
     }
 
     async playSong(){
@@ -219,16 +219,28 @@ export class SongManager {
     
         request.onsuccess =(e) =>{
             
-            let index = this.songs.indexOf(id);
+
+            console.log(this.songsList); 
+            let index = this.songsList.indexOf(id);
             if (index !== -1) {
-                this.songs.splice(index, 1);
+                this.songsList.splice(index, 1);
+            }
+            
+            index = this.songs.indexOf(id); //borra de las canciones actuales
+   
+            if (index !== -1) {
+                this.songs.splice(index, 1); // borra el id del array de canciones
+            }
+
+            index = this.favoritelist.indexOf(id); //borra de las canciones favoritas
+            if (index !== -1) {
+                this.favoritelist.splice(index, 1);
             }
             
             console.log("El objeto ha sido borrado con éxito", id);
-            console.log(this.songs); 
             this.nextSong();
 
-            if (this.songs.length === 0) {
+            if (this.songsList.length === 0) {
                 document.querySelector('#more-music').click();
             }
         };
@@ -287,13 +299,15 @@ export class SongManager {
     }
 
     async nextSong() {
+
         let songNumber = this.audioId;
 
         if (!(songNumber >= Math.max.apply(null, this.songs))){
             songNumber++;
+            console.log("nextcancion2", songNumber);
             while (!this.songs.includes(songNumber)) {
-                console.log("entra")
-                this.audioId++;
+                console.log("songNumber", songNumber);
+                songNumber++;
             }
         }else{
             songNumber = Math.min.apply(null, this.songs);
@@ -311,7 +325,7 @@ export class SongManager {
 
             while (!this.songs.includes(songNumber)) {
                 console.log("entra")
-                this.audioId--;
+                songNumber--;
             }
         }else{
             songNumber = Math.max.apply(null, this.songs);
@@ -319,6 +333,16 @@ export class SongManager {
         this.audioChange = true;
         await this.setSong(songNumber);
         this.playSong();
+    }
+    
+    changeSongsType(){
+        if(this.favoritelist.length == 0){
+            console.log('No hay canciones favoritas');
+        }else{
+
+            this.songs = (this.songsList == this.songs )?   this.favoritelist :this.songsList ;
+            console.log("canciones", this.songs);
+        }
     }
 
  
@@ -328,14 +352,19 @@ export class SongManager {
         let store = transaction.objectStore(this.storeName);
         let request = store.openCursor();
 
-        this.songs = []; // Vacía la lista de canciones antes de llenarla
+
+
 
         request.onsuccess = async (e) => {
             let cursor = e.target.result;
             if (cursor) {
-                this.songs.push(cursor.value.id); // Agrega el id al array de canciones
+                this.songsList.push(cursor.value.id); // Agrega el id al array de canciones
+                if (cursor.value.isFavorite) {
+                    this.favoritelist.push(cursor.value.id); // Agrega el id al array de canciones favoritas
+                }
                 cursor.continue(); // Continúa al siguiente registro
             } else {
+                this.songs =this.songsList ;
                 console.log("Canciones cargadas con éxito", this.songs);
                 if (this.songs.length == 0) {
                     // If there are no songs, click the music list button
@@ -614,6 +643,6 @@ export class SongManager {
         this.selector = true;
         await this.setSong(this.audioId);
         this.playSong();
-        };
+    };
 }
 
