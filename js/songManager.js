@@ -417,43 +417,6 @@ export class SongManager {
     }
 
 
-    changePic(){
-        return new Promise((resolve, reject) => {
-            const fileInput = document.createElement('input');
-            fileInput.type = 'file';
-            fileInput.accept = 'image/jpeg, image/png';
-            const self = this; // Define 'self' to refer to the SongManager instance
-            fileInput.onchange = async function() {
-                const file = this.files[0];
-                
-                try {
-                    let transaction = self.db.transaction([self.storeName], "readwrite");
-                    let store = transaction.objectStore(self.storeName);
-                    let getRequest = store.get(self.audioId);
-                    getRequest.onsuccess = ()=> {
-                        console.log("cambiando imagen", file);
-                        getRequest.result.img = file;
-                        let request = store.put(getRequest.result);
-                        request.onsuccess = (e)=> {
-                            console.log("Imagen cambiada con éxito");
-                            resolve();
-                        };
-                        request.onerror = function(e) {
-                            console.log("Error al cambiar la imagen", e.target.error);
-                            reject(e.target.error);
-                        };
-                    };
-                } catch (error) {
-                    console.error(error);
-                    reject(error); // Reject the promise if there's an error
-                }
-
-            };
-            fileInput.click();
-        });
-    }
-
-
     imgDefault = function (path) {
         return new Promise((resolve, reject) => {
             fetch(path)
