@@ -150,8 +150,19 @@ export class SongManager {
                 let song = request.result;
                 song.isFavorite = this.isFavorite;
                 store.put(song);
-
-                this.favoritelist.push(this.audioId);
+                if (this.isFavorite && !this.favoritelist.includes(this.audioId)) {
+                    this.favoritelist.push(this.audioId);
+                }else{
+                    let index = this.favoritelist.indexOf(this.audioId);
+                    if (index !== -1) {
+                        this.favoritelist.splice(index, 1);
+                    }
+                    if (this.favoritelist.length == 0) {
+                        this.changeSongsType();
+                    }
+                    
+                }
+                
                 console.log("Canción favorita añadida con éxito", this.favoritelist);
             };
             favBtn.innerText = this.isFavorite ? "star" : "star_border";
