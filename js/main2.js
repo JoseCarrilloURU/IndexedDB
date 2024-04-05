@@ -15,7 +15,7 @@ toggleunfavBtn = favoriteList.querySelector("#toggle-unfav"),
 closefav = favoriteList.querySelector("#close-fav"),
 closemoreMusic = musicList.querySelector("#close"),
 uploadBtn = wrapper.querySelector("#upload"),
-changeImgBtn = wrapper.querySelector("#changePic");
+changeTypeBtn = wrapper.querySelector("#changeType");
 
 let songManager;
 
@@ -63,7 +63,7 @@ nextBtn.addEventListener('click', ()=> {
     songManager.nextSong();
 });
 
- changePic.addEventListener('click', ()=> {
+changeTypeBtn.addEventListener('click', ()=> {
     songManager.changeSongsType();
 }); 
 
