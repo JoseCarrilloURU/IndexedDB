@@ -352,6 +352,7 @@ export class SongManager {
         let store = transaction.objectStore(this.storeName);
         let request = store.openCursor();
 
+        
         request.onsuccess = async (e) => {
             let cursor = e.target.result;
             if (cursor) {
