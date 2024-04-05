@@ -36,7 +36,6 @@ let dbPromise = new Promise((resolve, reject) => {
         let db = dbRequest.result;
         songManager = new SongManager(db,"SongStore");
         console.log("La base de datos ha sido abierta con éxito y pasada a SongManager");
-        moreMusicBtn.click();
       resolve(event.target.result);
     };
 
